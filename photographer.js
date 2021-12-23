@@ -81,33 +81,8 @@ function isImage(filename) {
 }
 
 
-
-fetch ("FishEyeData.json")
-.then(response => {return response.json()}) //extrait le json
-.then(function generatePhotograph(jsonObj) {
-
-  // RECUPERATION DES DONNEES
-    let id = getPhotographersIdFromUrl();
-    let photographer = getPhotographerFromJson(id, jsonObj);
-    console.log(photographer); 
-
-    let photographerId = id;
-    let media = getMediaFromJson(photographerId, jsonObj);
-    console.log(media);
-
-    let tarifJournalier = photographer.price;
-    console.log("----------------" + tarifJournalier);
-
-    nombreTotalDeLikes = CalculNombreTotalDeLikes(media);
-    console.log("_________________" + nombreTotalDeLikes);
-
-
-  // AFFICHAGE
-
-    // Code HTML relatif aux données ("photographerData") et à l'image du photographe ("photographerPortrait") (dans "photograph-header")
+function generateSectionPhotograph(photographer) {
     let photographHeader = document.querySelector(".photograph-header");
-
-    //sectionPhotograph
     let sectionPhotograph = document.createElement('div');
     sectionPhotograph.classList.add('PhotographerData');
     sectionPhotograph.innerHTML =
@@ -119,16 +94,22 @@ fetch ("FishEyeData.json")
     console.log(photographHeader.innerHTML);
 
     photographHeader.appendChild(sectionPhotograph);
-    
-    //sectionButton
+}
+
+
+function generateSectionButton() {
+    let photographHeader = document.querySelector(".photograph-header");
     let sectionButton = document.createElement('button');
     sectionButton.classList.add('contact_button');
     sectionButton.classList.add('contact_me');
     //sectionButton.setAttribute("onclick", "displayModal()")
     sectionButton.innerHTML = 'Contactez-moi';
-    photographHeader.appendChild(sectionButton)
+    photographHeader.appendChild(sectionButton);
+}
 
-    //sectionPortrait
+
+function generateSectionPortrait(photographer) {
+    let photographHeader = document.querySelector(".photograph-header");
     let sectionPortrait = document.createElement('div');
     
     sectionPortrait.classList.add('photographerPortrait');
@@ -139,34 +120,39 @@ fetch ("FishEyeData.json")
     console.log(photographHeader.innerHTML);
 
     photographHeader.appendChild(sectionPortrait);
+}
 
-    // Code HTML relatif aux oeuvres du photographe ("photographerWork")
+
+function generatePhotographerWork(photographerMedia, photographer) {
     let mediaList = document.querySelector(".mediaList");
-    media.forEach(mediaElement => {
+    photographerMedia.forEach(mediaElement => {
         let sectionMedia = document.createElement('div');
-    
+
         sectionMedia.classList.add('photographerWork');
 
         console.log("========================>" +mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="media"> <img class="media" onclick="openModal()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<a href="#"> <div class="media"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur"> </i></div>';
         } else {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="media"> <video class="media" onclick="openModal()"> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+            '<a href="#"> <div class="media"> <video class="media" onclick="openLightbox()"> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur"></i>  </div>';
         }
 
         //console.log(sectionMedia.innerHTML);
         //console.log(mediaList.innerHTML);
-    
+
         mediaList.appendChild(sectionMedia);
     });
+}
 
-    // Code HTML relatif au compteur global de "likes" et au tarif journalier du photographe (dans "photographerLikes")
+/*function generateCompteurGlobalEtTarif(photographer, photographerMedia) {
     let photographerLikes = document.querySelector(".photographerLikes");
-
+    let tarifJournalier = photographer.price;
+    let nombreTotalDeLikes = CalculNombreTotalDeLikes(photographerMedia);
+    
     let sectionCompteurLikes = document.createElement('span');
     let sectionPricePerDay = document.createElement('span');
 
@@ -180,24 +166,127 @@ fetch ("FishEyeData.json")
 
     photographerLikes.appendChild(sectionCompteurLikes);
     photographerLikes.appendChild(sectionPricePerDay);
+}*/
+
+function displayCompteurGlobal(nombreTotalDeLikes) {   
+    let photographerLikes = document.querySelector(".photographerLikes");
+
+    let sectionCompteurLikes = document.createElement('span');
+    sectionCompteurLikes.classList.add('compteurLikes');
+    sectionCompteurLikes.innerHTML =
+        '<span>' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i> ';
+
+    photographerLikes.appendChild(sectionCompteurLikes);
+}
+
+function displayTarif(tarifJournalier) {
+
+    let photographerLikes = document.querySelector(".photographerLikes");
+
+    let sectionPricePerDay = document.createElement('span');
+
+    sectionPricePerDay.classList.add('pricePerDay');
+    sectionPricePerDay.innerHTML =
+        '<span>' + tarifJournalier + '€ / jour </span>';
+
+    photographerLikes.appendChild(sectionPricePerDay);
+}
+
+function CalculNombreTotalDeLikes(photographerMedia) {
+    let LikesSum = 0;
+    photographerMedia.forEach(mediaElement => {
+        LikesSum = LikesSum + mediaElement.likes;
+    });
+    return LikesSum;
+}
 
 
-    generateLightboxHtml(media, photographer);
+/* ---------------------- Lightbox -------------------- */
+
+function openLightbox() {
+    document.querySelector(".lightbox").style.display = "block";
+  }
+  
+  function closeLightbox() {
+      const lightbox = document.querySelector(".lightbox");
+      lightbox.style.display = "none";
+  }
+  
+  var mediaIndex = 1;
+  
+  // Next/previous controls
+  function plusMedias(n) {
+    showLightboxMedias(mediaIndex += n);
+  }
+  
+  function showLightboxMedias(n) {
+    let medias = document.getElementsByClassName("lightboxItems");
+  
+    if (n > medias.length) {mediaIndex = 1;}
+    if (n < 1) {mediaIndex = medias.length;}
+    for (let i = 0; i < medias.length; i++) {
+      medias[i].style.display = "none";
+    }
+   // medias[mediaIndex-1].style.display = "block";
+  }
+  
+  function generateLightboxHtml(media, photographer) {
+    let lightboxContainer = document.querySelector(".lightbox__container");
+    media.forEach(mediaElement => {
+      let sectionMedia = document.createElement('div');
+  
+      sectionMedia.classList.add('lightboxItems');
+  
+      console.log("=============>" + mediaElement.image);
+      if (mediaElement.image) {
+          sectionMedia.innerHTML =
+          '<a href="#"> <div class="media"> <img class="media" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
+          '<div class="caption"> <span class="title">' + mediaElement.title + '</div>';
+      } else {
+          sectionMedia.innerHTML =
+          '<a href="#"> <div class="media"> <video class="media" controls> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+          '<div class="caption"> <span class="title">' + mediaElement.title + '</div>';
+      }
+  
+     // console.log(sectionMedia.innerHTML);
+      //console.log(lightboxContainer.innerHTML);
+  
+      lightboxContainer.appendChild(sectionMedia);
+  
+    });
+  }
+  /* ----------------------------- */
+
+
+//Fetch
+fetch ("FishEyeData.json")
+.then(response => {return response.json()}) //extrait le json
+.then(function generatePhotograph(jsonObj) {
+
+  // RECUPERATION DES DONNEES
+    let photographerId = getPhotographersIdFromUrl();
+    let photographer = getPhotographerFromJson(photographerId, jsonObj);
+    console.log(photographer); 
+
+    let photographerMedia = getMediaFromJson(photographerId, jsonObj);
+    console.log(photographerMedia);
+
+    let nombreTotalDeLikes = CalculNombreTotalDeLikes(photographerMedia);
+
+    let tarifJournalier = photographer.price;
+    console.log("----------------" + tarifJournalier);
+
+    // GENERATIION HTML
+    generateSectionPhotograph(photographer);
+    generateSectionButton();
+    generateSectionPortrait(photographer);
+    generatePhotographerWork(photographerMedia, photographer);
+    generateLightboxHtml(photographerMedia, photographer);
+    displayCompteurGlobal(nombreTotalDeLikes);
+    displayTarif(tarifJournalier);
 
     //showMedias(mediaIndex);
 
-    // Fonction qui calcule le nombre total de "likes" du photographe
-    // - prend en entrée : "likes" de chaque média du photographe (in Json)
-    // - renvoie : la somme des "likes" 
-
-    function CalculNombreTotalDeLikes(media) {
-        let LikesSum = 0;
-        media.forEach(mediaElement => {
-            LikesSum = LikesSum + mediaElement.likes;
-        });
-        return LikesSum;
-    }
-    
     //var tableauDeLikesParMedia = [];
     //var nombreTotalDeLikes = 0;
 
@@ -251,59 +340,4 @@ fetch ("FishEyeData.json")
 
 })
 
-/* ---------------------- Lightbox -------------------- */
 
-function openLightbox() {
-  document.querySelector(".lightbox").style.display = "block";
-}
-
-function closeLightbox() {
-    const lightbox = document.querySelector(".lightbox");
-    lightbox.style.display = "none";
-}
-
-var mediaIndex = 1;
-
-
-// Next/previous controls
-function plusMedias(n) {
-  showLightboxMedias(mediaIndex += n);
-}
-
-function showLightboxMedias(n) {
-  let medias = document.getElementsByClassName("lightboxItems");
-
-  if (n > medias.length) {mediaIndex = 1;}
-  if (n < 1) {mediaIndex = medias.length;}
-  for (let i = 0; i < medias.length; i++) {
-    medias[i].style.display = "none";
-  }
- // medias[mediaIndex-1].style.display = "block";
-}
-
-function generateLightboxHtml(media, photographer) {
-  let lightboxContainer = document.querySelector(".lightbox__container");
-  media.forEach(mediaElement => {
-    let sectionMedia = document.createElement('div');
-
-    sectionMedia.classList.add('lightboxItems');
-
-    console.log("=============>" + mediaElement.image);
-    if (mediaElement.image) {
-        sectionMedia.innerHTML =
-        '<a href="#"> <div class="media"> <img class="media" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
-        '<div class="caption"> <span class="title">' + mediaElement.title + '</div>';
-    } else {
-        sectionMedia.innerHTML =
-        '<a href="#"> <div class="media"> <video class="media" controls> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
-        '<div class="caption"> <span class="title">' + mediaElement.title + '</div>';
-    }
-
-   // console.log(sectionMedia.innerHTML);
-    //console.log(lightboxContainer.innerHTML);
-
-    lightboxContainer.appendChild(sectionMedia);
-
-  });
-}
-/* ----------------------------- */
