@@ -1,0 +1,101 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: DM sans, sans-serif;
+}
+
+header, .photographersList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 2rem 2rem;
+}
+
+header {
+    align-items: baseline;
+}
+.logo img, .text {
+    align-items: baseline;
+}
+
+.logo {
+    height: 3rem;
+    margin-left: 2rem;
+    margin-right: auto;
+    color: #911C1C;
+}
+
+.text {
+    justify-content: flex-end;
+    margin-right: 2rem;
+    font-size: 2.25rem;
+    line-height: 2.938rem;
+    color: #911C1C;
+}
+
+.portrait {
+    display: flex;
+    justify-content: center;
+    width: auto;
+    padding-bottom: 2rem;
+}
+
+.portrait img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0px 5px 10px lightgray;
+    margin: auto;
+}
+
+.photographersList {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.sectionPhotograph {
+    display: flex;
+    flex-direction: row;
+    width: 25%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    font-size: 10rem;
+}
+
+.name {
+    font-size: 2.5rem;
+    line-height: 2rem;
+    text-align: center;
+    color: #D3573C;
+}
+.location {  
+    font-size: 1rem;
+    line-height: 1.8rem;
+    text-align: center;
+    color: #901C1C;
+}
+.marketingHook {
+    font-size: 1rem;
+    line-height: 1.8rem;
+    text-align: center; 
+    color: #000000;
+}
+.price {
+    font-size: 1rem;
+    line-height: 1.8rem;
+    text-align: center;
+    color: #757575;
+}
+
+a {
+    text-decoration: none;
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin: 4rem 4rem;   
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <link href="index.css" rel="stylesheet" type="text/css" />
+    <link href="photographer.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/fffc96f8f9.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="assets/images/favicon.ico">
+    <title>Fisheye - photographe </title>
+  </head>
+
+  <body>
+    <header>
+      <div class="logo"><a href="index.html"><img src="assets/images/logo.png" class="logo" /></a></div>
+    </header>
+
+    <main id="main">
+        <div class="photograph-header">
+               
+        </div>
+        <div class="sorting">
+          <form>
+            <label for="sorting-select"> Trier par   
+              <select name="sorting" id="sorting-select">
+                <option value="popularity">Popularité</option>
+                <option value="date">Date</option>
+                <option value="title">Titre</option>
+              </select>
+            </label>
+          </form>
+        </div>
+        <div class="mediaList">
+          <!-- HTML généré à partir du fichier "photographer.js" -->
+        </div>
+        <div class="photographerLikes">
+          <!-- HTML généré à partir du fichier "photographer.js" -->
+        </div>
+    </main>
+
+    <div id="contact_modal">
+        <div class="modal">
+            <header>
+                <h2>Contactez-moi</h2>
+                <img src="assets/icons/close.svg" onclick="closeModal()" />
+            </header>
+            <form>
+                <div>
+                    <label>Prénom</label>
+                    <input />
+                </div>
+                <button class="contact_button">Envoyer</button>
+            </form>
+        </div>
+    </div>
+
+    <!--lightbox-->
+    <div class="lightbox">
+
+      <button class="lightbox__prev" onclick="plusMedias(1)"><i class="fas fa-chevron-left"></i> Précédent</button>
+      <div class="lightbox__container">
+        <img class= "hiddenImage" src="Photos/Ellie Rose Wilkens/Architecture_Connected_Curves.jpg" alt="Connected Curves">
+      </div>
+      <button class="lightbox__next" onclick="plusMedias(-1)"> Suivant<i class="fas fa-chevron-right"></i></button>
+      <button class="lightbox__close" onclick="closeLightbox()"><i class="fas fa-times"></i> Fermer</button>
+    </div>
+    
+
+    <script src="photographer.js"></script>
+    <script src="contactForm.js"></script>
+  </body>
+  
+</html>
