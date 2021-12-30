@@ -249,8 +249,8 @@ fetch ("FishEyeData.json")
         media.addEventListener("click", e => {
             let source = e.target.getAttribute('src');
             index = allMediaArray.indexOf(e.target);
-            console.log(source + ": source");
-            console.log(index + ": index");
+            console.log(source + " : source");
+            console.log(index + " : index");
             hiddenImage.setAttribute('src', source);
             hiddenImage.style.display = "block";
         })
@@ -266,7 +266,8 @@ fetch ("FishEyeData.json")
         let sourceNext = allMediaArray[index].getAttribute('src');
         hiddenImage.setAttribute('src', sourceNext);
         hiddenImage.style.display = "block";
-        console.log(sourceNext + "sourceNext");
+        console.log(sourceNext + " : sourceNext");
+        
     })
 
     let lightboxPrev = document.querySelector(".lightbox__prev");
@@ -279,7 +280,7 @@ fetch ("FishEyeData.json")
         let sourcePrev = allMediaArray[index].getAttribute('src');
         hiddenImage.setAttribute('src', sourcePrev);
         hiddenImage.style.display = "block";
-        console.log(sourcePrev + "sourcePrev");
+        console.log(sourcePrev + " : sourcePrev");
     })
 
 
