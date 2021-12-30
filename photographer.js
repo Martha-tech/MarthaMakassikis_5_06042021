@@ -80,7 +80,7 @@ function isImage(filename) {
     return result;
 }
 
-
+//Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif aux données du photographe
 function generateSectionPhotograph(photographer) {
     let photographHeader = document.querySelector(".photograph-header");
     let sectionPhotograph = document.createElement('div');
@@ -96,7 +96,7 @@ function generateSectionPhotograph(photographer) {
     photographHeader.appendChild(sectionPhotograph);
 }
 
-
+//Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif au bouton pour contacter le photographe
 function generateSectionButton() {
     let photographHeader = document.querySelector(".photograph-header");
     let sectionButton = document.createElement('button');
@@ -107,7 +107,7 @@ function generateSectionButton() {
     photographHeader.appendChild(sectionButton);
 }
 
-
+//Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif à la photo du photographe
 function generateSectionPortrait(photographer) {
     let photographHeader = document.querySelector(".photograph-header");
     let sectionPortrait = document.createElement('div');
@@ -122,7 +122,7 @@ function generateSectionPortrait(photographer) {
     photographHeader.appendChild(sectionPortrait);
 }
 
-
+//Fonction qui génère, dans la DIV "mediaList", le contenu HTML relatif aux oeuvres (picturales et animées) du photographe
 function generatePhotographerWork(photographerMedia, photographer) {
     let mediaList = document.querySelector(".mediaList");
     photographerMedia.forEach(mediaElement => {
@@ -130,7 +130,7 @@ function generatePhotographerWork(photographerMedia, photographer) {
 
         sectionMedia.classList.add('photographerWork');
 
-        console.log("========================>" +mediaElement.image);
+        console.log("========================>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
             '<a href="#"> <div class="divMedia"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
@@ -148,6 +148,7 @@ function generatePhotographerWork(photographerMedia, photographer) {
     });
 }
 
+
 function displayCompteurGlobal(nombreTotalDeLikes) {   
     let photographerLikes = document.querySelector(".photographerLikes");
 
@@ -158,6 +159,7 @@ function displayCompteurGlobal(nombreTotalDeLikes) {
 
     photographerLikes.appendChild(sectionCompteurLikes);
 }
+
 
 function displayTarif(tarifJournalier) {
 
@@ -172,17 +174,17 @@ function displayTarif(tarifJournalier) {
     photographerLikes.appendChild(sectionPricePerDay);
 }
 
-function CalculNombreTotalDeLikes(photographerMedia) {
-    let LikesSum = 0;
+
+function calculNombreTotalDeLikes(photographerMedia) {
+    let likesSum = 0;
     photographerMedia.forEach(mediaElement => {
-        LikesSum = LikesSum + mediaElement.likes;
+        likesSum = likesSum + mediaElement.likes;
     });
-    return LikesSum;
+    return likesSum;
 }
 
 
-/* ---------------------- Lightbox -------------------- */
-
+//Fonctions qui permettent de lancer et de fermer la lightbox
 function openLightbox() {
     document.querySelector(".lightbox").style.display = "block";
 }
@@ -191,11 +193,65 @@ function closeLightbox() {
     document.querySelector(".lightbox").style.display = "none";
 }
 
-  
-  /* -------------------------------------------------- */
+
+var globalIndex = 0; // pour partager sa valeur entre 3 fonctions
+
+//Fonctions qui permettent d'afficher les diapositives courante, suivante et précédente de la Lightbox
+function displayLightboxCurrentSlide(allMediaArray, hiddenImage) {
+    allMediaArray.forEach(media => {
+        media.addEventListener("click", e => {
+            let source = e.target.getAttribute('src');
+            globalIndex = allMediaArray.indexOf(e.target);
+            console.log(source + " : source");
+            console.log(globalIndex + " : index");
+            hiddenImage.setAttribute('src', source);
+            hiddenImage.style.display = "block";
+        })
+    })
+}
+
+function displayLightboxNextSlide(allMediaArray, hiddenImage) {
+    let lightboxNext = document.querySelector(".lightbox__next");
+
+    lightboxNext.addEventListener("click", e => {
+        globalIndex = globalIndex + 1;
+        console.log(globalIndex + " : indexNext");
+        console.log(allMediaArray + " : allMediaArray");
+
+        if (globalIndex > allMediaArray.length - 1){
+            globalIndex = 0;
+        } 
+
+        let sourceNext = allMediaArray[globalIndex].getAttribute('src');
+
+        hiddenImage.setAttribute("src", sourceNext);
+        hiddenImage.style.display = "block";
+        console.log(sourceNext + " : sourceNext");
+    })
+}
+
+function displayLightboxPreviousSlide(allMediaArray, hiddenImage) {
+    let lightboxPrev = document.querySelector(".lightbox__prev");
+
+    lightboxPrev.addEventListener("click", e => {
+        globalIndex = globalIndex - 1;
+        console.log(globalIndex + " : indexPrev");
+
+        if (globalIndex < 0) {
+            globalIndex = allMediaArray.length - 1;
+        }
+
+        let sourcePrev = allMediaArray[globalIndex].getAttribute("src");
+
+        hiddenImage.setAttribute("src", sourcePrev);
+        hiddenImage.style.display = "block";
+        console.log(sourcePrev + " : sourcePrev");
+    })
+}
 
 
-//Fetch
+
+/* ---------------------- FETCH -------------------- */
 fetch ("FishEyeData.json")
 .then(response => {return response.json()}) //extrait le json
 .then(function generatePhotograph(jsonObj) {
@@ -208,7 +264,7 @@ fetch ("FishEyeData.json")
     let photographerMedia = getMediaFromJson(photographerId, jsonObj);
     console.log(photographerMedia);
 
-    let nombreTotalDeLikes = CalculNombreTotalDeLikes(photographerMedia);
+    let nombreTotalDeLikes = calculNombreTotalDeLikes(photographerMedia);
 
     let tarifJournalier = photographer.price;
     console.log("----------------" + tarifJournalier);
@@ -226,6 +282,7 @@ fetch ("FishEyeData.json")
     let compteurGlobal = document.querySelector(".compteurLikes");
     let compteurMedia = document.querySelector(".likes");
 
+    //...
     const coeurs = document.querySelectorAll(".coeur");
     coeurs.forEach(coeur => {
         coeur.addEventListener("click", e => {
@@ -238,52 +295,15 @@ fetch ("FishEyeData.json")
         });
     });
 
-    // Listeners sur la lightbox
+    // Listeners sur la Lightbox
     let hiddenImage = document.querySelector(".hiddenImage");
-
     let allMediaArray = [...document.querySelectorAll(".media")];
-    console.log(allMediaArray + " : tableau des média");
-    let index = 0;
+    
+    displayLightboxCurrentSlide(allMediaArray, hiddenImage);
+    displayLightboxNextSlide(allMediaArray, hiddenImage);
+    displayLightboxPreviousSlide(allMediaArray, hiddenImage);
 
-    allMediaArray.forEach(media => {
-        media.addEventListener("click", e => {
-            let source = e.target.getAttribute('src');
-            index = allMediaArray.indexOf(e.target);
-            console.log(source + " : source");
-            console.log(index + " : index");
-            hiddenImage.setAttribute('src', source);
-            hiddenImage.style.display = "block";
-        })
-    })
-
-    let lightboxNext = document.querySelector(".lightbox__next");
-    lightboxNext.addEventListener("click", e => {
-        index = index + 1;
-        console.log(index + " : indexNext");
-        if (index > allMediaArray.length - 1){
-            index = 0;
-        } 
-        let sourceNext = allMediaArray[index].getAttribute('src');
-        hiddenImage.setAttribute('src', sourceNext);
-        hiddenImage.style.display = "block";
-        console.log(sourceNext + " : sourceNext");
-        
-    })
-
-    let lightboxPrev = document.querySelector(".lightbox__prev");
-    lightboxPrev.addEventListener("click", e => {
-        index = index - 1;
-        console.log(index + " : indexPrev");
-        if (index < 0) {
-            index = allMediaArray.length - 1;
-        }
-        let sourcePrev = allMediaArray[index].getAttribute('src');
-        hiddenImage.setAttribute('src', sourcePrev);
-        hiddenImage.style.display = "block";
-        console.log(sourcePrev + " : sourcePrev");
-    })
-
-
+    // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
     let contactModal = document.getElementById("contact_modal");
     let contactMe = document.querySelector(".contact_me");
     
@@ -292,5 +312,7 @@ fetch ("FishEyeData.json")
     });
 
 })
+
+/*------------------------------FIN DU FETCH-------------------------*/
 
 
