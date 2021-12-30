@@ -42,13 +42,25 @@
     <div id="contact_modal">
         <div class="modal">
             <header>
-                <h2>Contactez-moi</h2>
-                <img src="assets/icons/close.svg" onclick="closeModal()" />
+                <span class="close_modal" onclick="closeModal()">&times;</span>
+                <h2>Contactez-moi</h2> 
             </header>
             <form>
                 <div>
-                    <label>Prénom</label>
-                    <input />
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom"/>
+                </div>
+                <div>
+                  <label for="nom">Nom</label>
+                  <input type="text" id="nom"/>
+                </div>
+                <div>
+                  <label for="email">Email</label>
+                  <input type="text" id="email"/>
+                </div>
+                <div>
+                  <label for="message">Votre message</label>
+                  <textarea id="message"></textarea>
                 </div>
                 <button class="contact_button">Envoyer</button>
             </form>
@@ -57,13 +69,15 @@
 
     <!--lightbox-->
     <div class="lightbox">
-
-      <button class="lightbox__prev" onclick="plusMedias(1)"><i class="fas fa-chevron-left"></i> Précédent</button>
+      <span class="lightbox__close" onclick="closeLightbox()"><i class="fas fa-times"></i> </span>
+      <a class="lightbox__prev" >&#10094;</a>
+      <a class="lightbox__next" >&#10095;</a>
       <div class="lightbox__container">
         <img class= "hiddenImage" src="Photos/Ellie Rose Wilkens/Architecture_Connected_Curves.jpg" alt="Connected Curves">
+        <div class="lightbox__caption"></div>
       </div>
-      <button class="lightbox__next" onclick="plusMedias(-1)"> Suivant<i class="fas fa-chevron-right"></i></button>
-      <button class="lightbox__close" onclick="closeLightbox()"><i class="fas fa-times"></i> Fermer</button>
+      
+      
     </div>
     
 

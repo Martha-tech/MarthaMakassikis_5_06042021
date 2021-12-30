@@ -33,7 +33,7 @@
     padding: 2rem 2rem;
 }
 
-.media img {
+.media {
     width: 25rem;
     height: 25rem;
     object-fit: cover;
@@ -71,7 +71,11 @@ video {
     font-weight: bold;
     width: 15.6rem;
     height: 4.3rem;
-    z-index: 5;
+    z-index: 1;
+}
+
+.coeur {
+    cursor: pointer;
 }
 
 i {
@@ -99,29 +103,42 @@ i {
 .modal {
     border-radius: 5px;
     background-color: #DB8876;
-    width: 50%;
+    width: 80%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     padding: 35px;
-    margin: 15% auto;
+    margin: 3% auto;
+    z-index: 1;
 }
 
 .modal header {
-    justify-content: space-between;
-    width: 100%;
+    display: flex;
+    /*justify-content: space-between;*/
+    width: 80%;
 }
 
-.modal header img {
-    cursor: pointer;
+.modal .close_modal {
+    /*cursor: pointer;
+    font-size: 3rem;
+    display: flex;
+    justify-content: right;*/
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .modal header h2 {
-    font-size: 64px;
+    font-size: 4rem;
     font-weight: normal;
     text-align: center;
 }
+.modal header img, .modal header h2 {
+    align-items: center;
+}
+
 
 form {
     display: flex;
@@ -146,13 +163,17 @@ form div {
     margin-bottom: 26px;
 }
 
-form input {
+form input, textarea {
     width: 100%;
-    height: 68px;
     border: none;
     border-radius: 5px;
 }
-
+form input {
+    height: 4rem;
+}
+textarea {
+    font-size: 8rem;
+}
 select {
     background-color: #901C1C;
     color: #FFFFFF;
@@ -194,14 +215,47 @@ option :hover {
 }
 
 .lightbox__close {
+    cursor: pointer;
     padding: 0.2rem 0.2rem;
     top: 20rem;
     right: 10rem;
-    z-index: 12;
+    z-index: 1;
+    color: #901C1C;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
 }
 
 .lightbox__next, .lightbox__prev {
-    z-index: 11;
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: #901C1C;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+}
+
+.lightbox__next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.lightbox__close:hover,
+.lightbox__close:focus,
+.lightbox__prev:hover,
+.lightbox__prev:focus,
+.lightbox__next:hover,
+.lightbox__next:focus {
+    color: #D3573C;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .hiddenImage {
@@ -214,5 +268,8 @@ option :hover {
     object-fit: cover;
 }
 
+.caption {
+    color: #901C1C;
+}
 
   

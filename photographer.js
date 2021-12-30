@@ -1,4 +1,4 @@
-/* ---------------------- Fonctions -------------------- */
+/* ---------------------- FONCTIONS -------------------- */
 // Récupération de l'ID du photographe sélectionné dans l'index.html
 function getPhotographersIdFromUrl() {
     const queryString = window.location.search;
@@ -102,7 +102,7 @@ function generateSectionButton() {
     let sectionButton = document.createElement('button');
     sectionButton.classList.add('contact_button');
     sectionButton.classList.add('contact_me');
-    //sectionButton.setAttribute("onclick", "displayModal()")
+    sectionButton.setAttribute("onclick", "displayModal()")
     sectionButton.innerHTML = 'Contactez-moi';
     photographHeader.appendChild(sectionButton);
 }
@@ -133,11 +133,11 @@ function generatePhotographerWork(photographerMedia, photographer) {
         console.log("========================>" +mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="media"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<a href="#"> <div class="divMedia"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur"> </i></div>';
         } else {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="media"> <video class="media" onclick="openLightbox()"> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+            '<a href="#"> <div class="divMedia"> <video class="media" onclick="openLightbox()"> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur"></i>  </div>';
         }
 
@@ -147,26 +147,6 @@ function generatePhotographerWork(photographerMedia, photographer) {
         mediaList.appendChild(sectionMedia);
     });
 }
-
-/*function generateCompteurGlobalEtTarif(photographer, photographerMedia) {
-    let photographerLikes = document.querySelector(".photographerLikes");
-    let tarifJournalier = photographer.price;
-    let nombreTotalDeLikes = CalculNombreTotalDeLikes(photographerMedia);
-    
-    let sectionCompteurLikes = document.createElement('span');
-    let sectionPricePerDay = document.createElement('span');
-
-    sectionCompteurLikes.classList.add('compteurLikes');
-    sectionPricePerDay.classList.add('pricePerDay');
-
-    sectionCompteurLikes.innerHTML =
-        '<span>' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i> ';
-    sectionPricePerDay.innerHTML =
-        '<span>' + tarifJournalier + '€ / jour </span>';
-
-    photographerLikes.appendChild(sectionCompteurLikes);
-    photographerLikes.appendChild(sectionPricePerDay);
-}*/
 
 function displayCompteurGlobal(nombreTotalDeLikes) {   
     let photographerLikes = document.querySelector(".photographerLikes");
@@ -205,57 +185,14 @@ function CalculNombreTotalDeLikes(photographerMedia) {
 
 function openLightbox() {
     document.querySelector(".lightbox").style.display = "block";
-  }
+}
   
-  function closeLightbox() {
-      const lightbox = document.querySelector(".lightbox");
-      lightbox.style.display = "none";
-  }
+function closeLightbox() {
+    document.querySelector(".lightbox").style.display = "none";
+}
+
   
-  var mediaIndex = 1;
-  
-  // Next/previous controls
-  function plusMedias(n) {
-    showLightboxMedias(mediaIndex += n);
-  }
-  
-  function showLightboxMedias(n) {
-    let medias = document.getElementsByClassName("lightboxItems");
-  
-    if (n > medias.length) {mediaIndex = 1;}
-    if (n < 1) {mediaIndex = medias.length;}
-    for (let i = 0; i < medias.length; i++) {
-      medias[i].style.display = "none";
-    }
-   // medias[mediaIndex-1].style.display = "block";
-  }
-  
-  function generateLightboxHtml(media, photographer) {
-    let lightboxContainer = document.querySelector(".lightbox__container");
-    media.forEach(mediaElement => {
-      let sectionMedia = document.createElement('div');
-  
-      sectionMedia.classList.add('lightboxItems');
-  
-      console.log("=============>" + mediaElement.image);
-      if (mediaElement.image) {
-          sectionMedia.innerHTML =
-          '<a href="#"> <div class="media"> <img class="media" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
-          '<div class="caption"> <span class="title">' + mediaElement.title + '</div>';
-      } else {
-          sectionMedia.innerHTML =
-          '<a href="#"> <div class="media"> <video class="media" controls> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
-          '<div class="caption"> <span class="title">' + mediaElement.title + '</div>';
-      }
-  
-     // console.log(sectionMedia.innerHTML);
-      //console.log(lightboxContainer.innerHTML);
-  
-      lightboxContainer.appendChild(sectionMedia);
-  
-    });
-  }
-  /* ----------------------------- */
+  /* -------------------------------------------------- */
 
 
 //Fetch
@@ -276,58 +213,69 @@ fetch ("FishEyeData.json")
     let tarifJournalier = photographer.price;
     console.log("----------------" + tarifJournalier);
 
-    // GENERATIION HTML
+    // GENERATION HTML
     generateSectionPhotograph(photographer);
     generateSectionButton();
     generateSectionPortrait(photographer);
     generatePhotographerWork(photographerMedia, photographer);
-    generateLightboxHtml(photographerMedia, photographer);
     displayCompteurGlobal(nombreTotalDeLikes);
     displayTarif(tarifJournalier);
 
-    //showMedias(mediaIndex);
-
-    //var tableauDeLikesParMedia = [];
-    //var nombreTotalDeLikes = 0;
-
 
     // Incrémentation du nombre de likes lorsqu'on clique sur l'icône "like"
-    const compteurGlobal = document.querySelector(".compteurLikes");
-    const compteurMedia = document.querySelector(".likes");
-
-    function incrementeLikes () {
-        compteurMedia = compteurMedia + 1;
-        compteurGlobal = compteurGlobal + 1;
-    }
+    let compteurGlobal = document.querySelector(".compteurLikes");
+    let compteurMedia = document.querySelector(".likes");
 
     const coeurs = document.querySelectorAll(".coeur");
     coeurs.forEach(coeur => {
         coeur.addEventListener("click", e => {
             let currentLikes = e.target.previousElementSibling;
             console.log(e.target);
-            console.log(currentLikes.innerHTML);
+            console.log(currentLikes.innerHTML +"innerHTML");
+            currentLikes = currentLikes + 1;
+            currentLikes.innerHTML = currentLikes.value + 1;
+            displayCompteurGlobal();
         });
     });
 
-    // Listener
+    // Listeners sur la lightbox
     let hiddenImage = document.querySelector(".hiddenImage");
-    let selectedMedias = document.querySelectorAll(".media");
-    /*let lightboxNext = document.querySelector(".lightbox__next");
-    let lightboxPrev = document.querySelector(".lightbox__prev");*/
 
-    selectedMedias.forEach(selectedMedia => {
-        selectedMedia.addEventListener("click", e => {
-            openLightbox();
+    let allMediaArray = [...document.querySelectorAll(".media")];
+    console.log(allMediaArray + " : tableau des média");
+    let index = 0;
+
+    allMediaArray.forEach(media => {
+        media.addEventListener("click", e => {
             let source = e.target.getAttribute('src');
-            console.log(source);
-            hiddenImage.style.display = "block";
+            index = allMediaArray.indexOf(e.target);
+            console.log(source + ": source");
+            console.log(index + ": index");
             hiddenImage.setAttribute('src', source);
-        });   
+            hiddenImage.style.display = "block";
+        })
     })
 
-    /*lightboxNext.addEventListener("click", e => {
+    let lightboxNext = document.querySelector(".lightbox__next");
+    lightboxNext.addEventListener("click", e => {
+        index = index + 1;
+        console.log(index + "indexNext");
+        let sourceNext = allMediaArray[index].getAttribute('src');
+        hiddenImage.setAttribute('src', sourceNext);
+        hiddenImage.style.display = "block";
+        console.log(sourceNext + "sourceNext");
+    })
 
-    })*/
+    let lightboxPrev = document.querySelector(".lightbox__prev");
+    lightboxPrev.addEventListener("click", e => {
+        index = index - 1;
+        console.log(index + "indexPrev");
+        let sourcePrev = allMediaArray[index].getAttribute('src');
+        hiddenImage.setAttribute('src', sourcePrev);
+        hiddenImage.style.display = "block";
+        console.log(sourcePrev + "sourcePrev");
+    })
+
 
     let contactModal = document.getElementById("contact_modal");
     let contactMe = document.querySelector(".contact_me");
@@ -335,8 +283,6 @@ fetch ("FishEyeData.json")
     contactMe.addEventListener("click", function(){
         contactModal.style.display="block";
     });
-    
-    //END
 
 })
 
