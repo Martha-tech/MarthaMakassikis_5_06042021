@@ -259,7 +259,10 @@ fetch ("FishEyeData.json")
     let lightboxNext = document.querySelector(".lightbox__next");
     lightboxNext.addEventListener("click", e => {
         index = index + 1;
-        console.log(index + "indexNext");
+        console.log(index + " : indexNext");
+        if (index > allMediaArray.length - 1){
+            index = 0;
+        } 
         let sourceNext = allMediaArray[index].getAttribute('src');
         hiddenImage.setAttribute('src', sourceNext);
         hiddenImage.style.display = "block";
@@ -269,7 +272,10 @@ fetch ("FishEyeData.json")
     let lightboxPrev = document.querySelector(".lightbox__prev");
     lightboxPrev.addEventListener("click", e => {
         index = index - 1;
-        console.log(index + "indexPrev");
+        console.log(index + " : indexPrev");
+        if (index < 0) {
+            index = allMediaArray.length - 1;
+        }
         let sourcePrev = allMediaArray[index].getAttribute('src');
         hiddenImage.setAttribute('src', sourcePrev);
         hiddenImage.style.display = "block";
