@@ -135,9 +135,9 @@ function generatePhotographerWork(photographerMedia, photographer) {
             sectionMedia.innerHTML =
             '<a href="#"> <div class="divMedia"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur"> </i></div>';
-        } else {
+        } else if (mediaElement.video) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="divMedia"> <video class="media" onclick="openLightbox()"> <source src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+            '<a href="#"> <div class="divMedia"> <video class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur"></i>  </div>';
         }
 
@@ -196,19 +196,32 @@ function closeLightbox() {
 
 var globalIndex = 0; // pour partager sa valeur entre 3 fonctions
 
+//Fonction qui permet d'afficher, dans la Lightbox, une image ou une vidéo
+function displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo) {
+    if (source.endsWith(".jpg")) {
+        hiddenImage.setAttribute("src", source);
+        hiddenImage.style.display = "block";
+        hiddenVideo.style.display = "none";
+    } else if (source.endsWith(".mp4")) {
+        hiddenVideo.setAttribute("src", source);
+        hiddenVideo.style.display ="block";
+        hiddenImage.style.display = "none";
+    }
+}
+
 //Fonctions qui permettent d'afficher les diapositives courante, suivante et précédente de la Lightbox
-function displayLightboxCurrentSlide(allMediaArray, hiddenImage) {
+function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
     allMediaArray.forEach(media => {
         media.addEventListener("click", e => {
-            let source = e.target.getAttribute('src');
+            let source = e.target.getAttribute("src"); // img | video cliqué
             globalIndex = allMediaArray.indexOf(e.target);
             console.log(source + " : source");
             console.log(globalIndex + " : index");
-            hiddenImage.setAttribute('src', source);
-            hiddenImage.style.display = "block";
+            displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
         })
     })
 }
+
 
 function displayLightboxNextSlide(allMediaArray, hiddenImage) {
     let lightboxNext = document.querySelector(".lightbox__next");
@@ -297,11 +310,14 @@ fetch ("FishEyeData.json")
 
     // Listeners sur la Lightbox
     let hiddenImage = document.querySelector(".hiddenImage");
+    let hiddenVideo = document.querySelector(".hiddenVideo");
     let allMediaArray = [...document.querySelectorAll(".media")];
     
-    displayLightboxCurrentSlide(allMediaArray, hiddenImage);
+   //displayImageOrVideoInLightbox(hiddenImage, hiddenVideo);
+    displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxNextSlide(allMediaArray, hiddenImage);
     displayLightboxPreviousSlide(allMediaArray, hiddenImage);
+
 
     // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
     let contactModal = document.getElementById("contact_modal");

@@ -261,7 +261,7 @@ option :hover {
     cursor: pointer;
 }
 
-.hiddenImage {
+.hiddenImage, .hiddenVideo {
     margin: auto auto;
     display: none;
     align-items: center;
