@@ -148,19 +148,21 @@ function generatePhotographerWork(photographerMedia, photographer) {
     });
 }
 
+//Fonctions qui permettent d'afficher, dans la div "photographerLikes" située en bas de page, 
 
+// le nombre total de likes du photographe
 function displayCompteurGlobal(nombreTotalDeLikes) {   
     let photographerLikes = document.querySelector(".photographerLikes");
 
     let sectionCompteurLikes = document.createElement('span');
     sectionCompteurLikes.classList.add('compteurLikes');
     sectionCompteurLikes.innerHTML =
-        '<span>' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i>';
+        '<span class="valeurCompteurGlobal">' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i>';
 
     photographerLikes.appendChild(sectionCompteurLikes);
 }
 
-
+// le tarif journalier du photographe
 function displayTarif(tarifJournalier) {
 
     let photographerLikes = document.querySelector(".photographerLikes");
@@ -183,6 +185,19 @@ function calculNombreTotalDeLikes(photographerMedia) {
     return likesSum;
 }
 
+//Fonction ajoutant un écouteur d'évènement sur chaque "like" qui permet d'incrémenter les compteurs individuel et global
+function installLikeEventListeners(coeurs) {
+    coeurs.forEach(coeur => {
+        coeur.addEventListener("click", e => {
+            let valeurCompteurIndividuel = e.target.previousElementSibling;
+            valeurCompteurIndividuel.innerHTML = parseInt(valeurCompteurIndividuel.innerHTML) + 1; //mise à jour de la valeur
+            console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
+            let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
+            valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
+            console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
+        });
+    });
+}
 
 //Fonctions qui permettent de lancer et de fermer la lightbox
 function openLightbox() {
@@ -223,7 +238,6 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
         })
     })
 }
-
 
 function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxNext = document.querySelector(".lightbox__next");
@@ -287,37 +301,16 @@ fetch ("FishEyeData.json")
     displayTarif(tarifJournalier);
 
 
-    // Incrémentation du nombre de likes du compteur global lorsqu'on clique sur l'icône "coeur"
-    /*function incrementeCompteurGlobal() {
-        calculNombreTotalDeLikes(photographerMedia).innerHTML = 
-    }*/
-
-    //Incrémentation et affichage du nombre de likes du compteur individuel lorsqu'on clique sur l'icône "coeur"
+    // Listeners sur les coeurs
     const coeurs = document.querySelectorAll(".coeur");
-    function incrementeCompteurIndividuel(coeurs) {
-        coeurs.forEach(coeur => {
-            coeur.addEventListener("click", e => {
-                //let currentLikes = e.target.previousElementSibling;
-                console.log(e.target);
-                console.log(e.target.previousElementSibling.innerHTML +"innerHTML");
-                //currentLikes = currentLikes + 1;
-                e.target.previousElementSibling.innerHTML = parseInt(e.target.previousElementSibling.innerHTML) + 1;
-                calculNombreTotalDeLikes(photographerMedia).innerHTML = parseInt(calculNombreTotalDeLikes(photographerMedia).innerHTML) + 1;
-                console.log(e.target.previousElementSibling.innerHTML + " : currentLikes content");
-                console.log(calculNombreTotalDeLikes(photographerMedia).innerHTML + " : compteurGlobal content");
-                console.log(typeof calculNombreTotalDeLikes(photographerMedia) + " : compteurGlobal type");
-                console.log(calculNombreTotalDeLikes(photographerMedia) + " : compteurGlobal value");
-            });
-        });
-    }
-    incrementeCompteurIndividuel(coeurs);
+    installLikeEventListeners(coeurs);
+
 
     // Listeners sur la Lightbox
     let hiddenImage = document.querySelector(".hiddenImage");
     let hiddenVideo = document.querySelector(".hiddenVideo");
     let allMediaArray = [...document.querySelectorAll(".media")];
     
-   //displayImageOrVideoInLightbox(hiddenImage, hiddenVideo);
     displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
