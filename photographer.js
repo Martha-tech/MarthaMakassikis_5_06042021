@@ -155,7 +155,7 @@ function displayCompteurGlobal(nombreTotalDeLikes) {
     let sectionCompteurLikes = document.createElement('span');
     sectionCompteurLikes.classList.add('compteurLikes');
     sectionCompteurLikes.innerHTML =
-        '<span>' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i> ';
+        '<span>' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i>';
 
     photographerLikes.appendChild(sectionCompteurLikes);
 }
@@ -174,7 +174,7 @@ function displayTarif(tarifJournalier) {
     photographerLikes.appendChild(sectionPricePerDay);
 }
 
-
+//Fonction qui, à partir du fichier Json, calcule le nombre total de likes du photographe 
 function calculNombreTotalDeLikes(photographerMedia) {
     let likesSum = 0;
     photographerMedia.forEach(mediaElement => {
@@ -202,10 +202,12 @@ function displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo) {
         hiddenImage.setAttribute("src", source);
         hiddenImage.style.display = "block";
         hiddenVideo.style.display = "none";
+        console.log(source + " : source image");
     } else if (source.endsWith(".mp4")) {
         hiddenVideo.setAttribute("src", source);
         hiddenVideo.style.display ="block";
         hiddenImage.style.display = "none";
+        console.log(source + " : source vidéo");
     }
 }
 
@@ -213,7 +215,7 @@ function displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo) {
 function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
     allMediaArray.forEach(media => {
         media.addEventListener("click", e => {
-            let source = e.target.getAttribute("src"); // img | video cliqué
+            let source = e.target.getAttribute("src"); // image ou vidéo cliquée
             globalIndex = allMediaArray.indexOf(e.target);
             console.log(source + " : source");
             console.log(globalIndex + " : index");
@@ -223,7 +225,7 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
 }
 
 
-function displayLightboxNextSlide(allMediaArray, hiddenImage) {
+function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxNext = document.querySelector(".lightbox__next");
 
     lightboxNext.addEventListener("click", e => {
@@ -235,15 +237,12 @@ function displayLightboxNextSlide(allMediaArray, hiddenImage) {
             globalIndex = 0;
         } 
 
-        let sourceNext = allMediaArray[globalIndex].getAttribute('src');
-
-        hiddenImage.setAttribute("src", sourceNext);
-        hiddenImage.style.display = "block";
-        console.log(sourceNext + " : sourceNext");
+        let source = allMediaArray[globalIndex].getAttribute('src');
+        displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
     })
 }
 
-function displayLightboxPreviousSlide(allMediaArray, hiddenImage) {
+function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxPrev = document.querySelector(".lightbox__prev");
 
     lightboxPrev.addEventListener("click", e => {
@@ -254,11 +253,8 @@ function displayLightboxPreviousSlide(allMediaArray, hiddenImage) {
             globalIndex = allMediaArray.length - 1;
         }
 
-        let sourcePrev = allMediaArray[globalIndex].getAttribute("src");
-
-        hiddenImage.setAttribute("src", sourcePrev);
-        hiddenImage.style.display = "block";
-        console.log(sourcePrev + " : sourcePrev");
+        let source = allMediaArray[globalIndex].getAttribute("src");
+        displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
     })
 }
 
@@ -291,22 +287,30 @@ fetch ("FishEyeData.json")
     displayTarif(tarifJournalier);
 
 
-    // Incrémentation du nombre de likes lorsqu'on clique sur l'icône "like"
-    let compteurGlobal = document.querySelector(".compteurLikes");
-    let compteurMedia = document.querySelector(".likes");
+    // Incrémentation du nombre de likes du compteur global lorsqu'on clique sur l'icône "coeur"
+    /*function incrementeCompteurGlobal() {
+        calculNombreTotalDeLikes(photographerMedia).innerHTML = 
+    }*/
 
-    //...
+    //Incrémentation et affichage du nombre de likes du compteur individuel lorsqu'on clique sur l'icône "coeur"
     const coeurs = document.querySelectorAll(".coeur");
-    coeurs.forEach(coeur => {
-        coeur.addEventListener("click", e => {
-            let currentLikes = e.target.previousElementSibling;
-            console.log(e.target);
-            console.log(currentLikes.innerHTML +"innerHTML");
-            currentLikes = currentLikes + 1;
-            currentLikes.innerHTML = currentLikes.value + 1;
-            displayCompteurGlobal();
+    function incrementeCompteurIndividuel(coeurs) {
+        coeurs.forEach(coeur => {
+            coeur.addEventListener("click", e => {
+                //let currentLikes = e.target.previousElementSibling;
+                console.log(e.target);
+                console.log(e.target.previousElementSibling.innerHTML +"innerHTML");
+                //currentLikes = currentLikes + 1;
+                e.target.previousElementSibling.innerHTML = parseInt(e.target.previousElementSibling.innerHTML) + 1;
+                calculNombreTotalDeLikes(photographerMedia).innerHTML = parseInt(calculNombreTotalDeLikes(photographerMedia).innerHTML) + 1;
+                console.log(e.target.previousElementSibling.innerHTML + " : currentLikes content");
+                console.log(calculNombreTotalDeLikes(photographerMedia).innerHTML + " : compteurGlobal content");
+                console.log(typeof calculNombreTotalDeLikes(photographerMedia) + " : compteurGlobal type");
+                console.log(calculNombreTotalDeLikes(photographerMedia) + " : compteurGlobal value");
+            });
         });
-    });
+    }
+    incrementeCompteurIndividuel(coeurs);
 
     // Listeners sur la Lightbox
     let hiddenImage = document.querySelector(".hiddenImage");
@@ -315,8 +319,8 @@ fetch ("FishEyeData.json")
     
    //displayImageOrVideoInLightbox(hiddenImage, hiddenVideo);
     displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
-    displayLightboxNextSlide(allMediaArray, hiddenImage);
-    displayLightboxPreviousSlide(allMediaArray, hiddenImage);
+    displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+    displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
 
 
     // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
