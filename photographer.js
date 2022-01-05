@@ -44,7 +44,7 @@ function getPhotographerFromJson(id, jsonObj) {
 })
 */
 
-// Réécrire avec un foreach
+// Réécrire avec un foreach ou un .filter ?
 function getMediaFromJson(photographerId, jsonObj) {
     let mediaArray = jsonObj.media;
     let resultArray = [];
@@ -125,12 +125,14 @@ function generateSectionPortrait(photographer) {
 //Fonction qui génère, dans la DIV "mediaList", le contenu HTML relatif aux oeuvres (picturales et animées) du photographe
 function generatePhotographerWork(photographerMedia, photographer) {
     let mediaList = document.querySelector(".mediaList");
+    let elementsHTML = []; // création d'un tableau vide
+    
     photographerMedia.forEach(mediaElement => {
         let sectionMedia = document.createElement('div');
-
+        
         sectionMedia.classList.add('photographerWork');
 
-        console.log("========================>" + mediaElement.image);
+        //console.log("========================>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
             '<a href="#"> <div class="divMedia"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
@@ -143,9 +145,9 @@ function generatePhotographerWork(photographerMedia, photographer) {
 
         //console.log(sectionMedia.innerHTML);
         //console.log(mediaList.innerHTML);
-
-        mediaList.appendChild(sectionMedia);
+        elementsHTML.push(sectionMedia); // ajout de "sectionMedia" dans le tableau "elementsHTML"
     });
+    mediaList.replaceChildren(...elementsHTML); // méthode qui s'applique à mediaList et qui prend en argument le tableau "elementsHTML" (éléments à remplacer)
 }
 
 //Fonctions qui permettent d'afficher, dans la div "photographerLikes" située en bas de page, 
@@ -279,7 +281,7 @@ fetch ("FishEyeData.json")
 .then(response => {return response.json()}) //extrait le json
 .then(function generatePhotograph(jsonObj) {
 
-  // RECUPERATION DES DONNEES
+  // Récupération de données
     let photographerId = getPhotographersIdFromUrl();
     let photographer = getPhotographerFromJson(photographerId, jsonObj);
     console.log(photographer); 
@@ -292,36 +294,97 @@ fetch ("FishEyeData.json")
     let tarifJournalier = photographer.price;
     console.log("----------------" + tarifJournalier);
 
-    // GENERATION HTML
+    // Génération du HTML
     generateSectionPhotograph(photographer);
     generateSectionButton();
     generateSectionPortrait(photographer);
+
+    // Appels de fonctions
     generatePhotographerWork(photographerMedia, photographer);
     displayCompteurGlobal(nombreTotalDeLikes);
     displayTarif(tarifJournalier);
-
+    
+    // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
+    let contactModal = document.getElementById("contact_modal");
+    let contactMe = document.querySelector(".contact_me");
+        
+    contactMe.addEventListener("click", function(){
+        contactModal.style.display="block";
+    });
 
     // Listeners sur les coeurs
     const coeurs = document.querySelectorAll(".coeur");
     installLikeEventListeners(coeurs);
-
-
+    
     // Listeners sur la Lightbox
     let hiddenImage = document.querySelector(".hiddenImage");
     let hiddenVideo = document.querySelector(".hiddenVideo");
     let allMediaArray = [...document.querySelectorAll(".media")];
-    
+        
     displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
-
-
-    // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
-    let contactModal = document.getElementById("contact_modal");
-    let contactMe = document.querySelector(".contact_me");
     
-    contactMe.addEventListener("click", function(){
-        contactModal.style.display="block";
+    // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre & ouverture de la Lightbox
+
+    /* sort entries in photographerMedia by popularity (like count), in descending order*/
+    let sortByPopularity = document.querySelector(".sortByPopularity");
+
+    sortByPopularity.addEventListener("click", e => {
+        photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
+        generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
+
+        let hiddenImage = document.querySelector(".hiddenImage");
+        let hiddenVideo = document.querySelector(".hiddenVideo");
+        let allMediaArray = [...document.querySelectorAll(".media")];
+        
+        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+        const coeurs = document.querySelectorAll(".coeur");
+        installLikeEventListeners(coeurs);
+    });
+
+    /* sort entries in photographerMedia by date value (year-month-day), in ascending order*/
+    let sortByDate = document.querySelector(".sortByDate");
+
+    sortByDate.addEventListener("click", e => {
+        photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
+        generatePhotographerWork(photographerMedia, photographer);
+        //La date, dans le json, est exprimée sous forme de chaîne de caractères. On recourt à "Date.parse()" pour convertir le string en objet de type "date".
+        //On prend l'attribut "date" de l'objet "a". On le passe en paramètre à la méthode "Date.parse" pour convertir la chaîne de caractères en date.
+    
+        let hiddenImage = document.querySelector(".hiddenImage");
+        let hiddenVideo = document.querySelector(".hiddenVideo");
+        let allMediaArray = [...document.querySelectorAll(".media")];
+        
+        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+        const coeurs = document.querySelectorAll(".coeur");
+        installLikeEventListeners(coeurs);
+    });
+
+    /* sort entries in photographerMedia by title (alphabetical order), in ascending order*/
+    let sortByTitle = document.querySelector(".sortByTitle");
+
+    sortByTitle.addEventListener("click", e => {
+        photographerMedia.sort(function compareMedia(a, b) {return a.title > b.title;});
+        //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
+        generatePhotographerWork(photographerMedia, photographer);
+   
+        let hiddenImage = document.querySelector(".hiddenImage");
+        let hiddenVideo = document.querySelector(".hiddenVideo");
+        let allMediaArray = [...document.querySelectorAll(".media")];
+        
+        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+        const coeurs = document.querySelectorAll(".coeur");
+        installLikeEventListeners(coeurs);
     });
 
 })
