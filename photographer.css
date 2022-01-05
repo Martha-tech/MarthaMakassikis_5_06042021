@@ -104,46 +104,46 @@ i {
 }
 
 .modal {
-    border-radius: 5px;
+    border-radius: 1rem;
     background-color: #DB8876;
-    width: 80%;
-    height: 90%;
+    width: 50vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: space-between;
-    padding: 35px;
+    padding: 2rem;
     margin: 3% auto;
-    z-index: 1;
 }
 
 .modal header {
     display: flex;
-    /*justify-content: space-between;*/
-    width: 80%;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.modal .close_modal {
-    /*cursor: pointer;
+.modal span {
+    cursor: pointer;
     font-size: 3rem;
+    font-weight: lighter;
     display: flex;
-    justify-content: right;*/
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    justify-content: left;
+    color:white;
 }
 
-.modal header h2 {
+.modal h2 {
     font-size: 4rem;
     font-weight: normal;
     text-align: center;
 }
-.modal header img, .modal header h2 {
-    align-items: center;
+
+.modal p {
+    font-size: 4rem;
+    font-weight: normal;
+    text-align: center;
 }
 
 
-form {
+.modal form {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -191,9 +191,13 @@ option :hover {
     color: #000;
 }
 
-@media screen and (min-width: 360px) and (max-width: 600px) {
-    .photographerData, button, .photographerPortrait {
-        margin-bottom: 2rem;
+@media screen and (min-width: 360px) and (max-width: 800px) {
+    .marketingHook, .photographerPortrait {
+        padding-bottom: 2vh;
+        justify-content:space-between;
+    }
+    button {
+        margin-bottom, margin-top: 2vh;
     }
     .photograph-header {
         display: flex;
@@ -259,6 +263,12 @@ option :hover {
     color: #D3573C;
     text-decoration: none;
     cursor: pointer;
+}
+
+.lightbox__caption {
+    color: #901C1C;
+    font-size: 1.5rem;
+    line-height: 2rem;
 }
 
 .hiddenImage, .hiddenVideo {

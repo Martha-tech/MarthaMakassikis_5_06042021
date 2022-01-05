@@ -80,6 +80,19 @@ function isImage(filename) {
     return result;
 }
 
+//Fonction qui génère, dans la modale de contact, le nom et le prénom du photographe
+function generatePhotographerNameInModal(photographer) {
+    let modalHeader = document.querySelector(".modal_header");
+    let photographerNameInModal = document.createElement ('p');
+    photographerNameInModal.classList.add('photographer_name');
+
+    photographerNameInModal.innerHTML = 
+        '<div>' + photographer.name + '</div>';
+    console.log(photographerNameInModal.innerHTML + " : photographer's name");
+
+    modalHeader.appendChild(photographerNameInModal);
+}
+
 //Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif aux données du photographe
 function generateSectionPhotograph(photographer) {
     let photographHeader = document.querySelector(".photograph-header");
@@ -300,6 +313,7 @@ fetch ("FishEyeData.json")
     generateSectionPortrait(photographer);
 
     // Appels de fonctions
+    generatePhotographerNameInModal(photographer);
     generatePhotographerWork(photographerMedia, photographer);
     displayCompteurGlobal(nombreTotalDeLikes);
     displayTarif(tarifJournalier);
@@ -325,7 +339,7 @@ fetch ("FishEyeData.json")
     displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
     
-    // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre & ouverture de la Lightbox
+    // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre & ouverture de la Lightbox & coeurs
 
     /* sort entries in photographerMedia by popularity (like count), in descending order*/
     let sortByPopularity = document.querySelector(".sortByPopularity");

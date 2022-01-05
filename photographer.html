@@ -24,9 +24,10 @@
           <form>
             <label for="sorting-select"> Trier par   
               <select name="sorting" id="sorting-select">
-                <option value="popularity">Popularité</option>
-                <option value="date">Date</option>
-                <option value="title">Titre</option>
+                <option value="" selected disabled hidden></option>
+                <option value="popularity" class="sortByPopularity">Popularité</option>
+                <option value="date" class="sortByDate">Date</option>
+                <option value="title" class="sortByTitle">Titre</option>
               </select>
             </label>
           </form>
@@ -41,9 +42,10 @@
 
     <div id="contact_modal">
         <div class="modal">
-            <header>
-                <span class="close_modal" onclick="closeModal()">&times;</span>
-                <h2>Contactez-moi</h2> 
+            <header class="modal_header">
+              <h2>Contactez-moi</h2> 
+              <span class="close_modal" onclick="closeModal()"><i class="fas fa-times"></i></span>
+              <!--<p class="photographer_name"></p>-->
             </header>
             <form>
                 <div>
