@@ -1,14 +1,4 @@
-#contact_modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(196, 196, 196, 0.4);
-}
-
+/* Div "photograph-header" et sous-élément "contact_button"*/
 .photograph-header {
     display: flex;
     flex-wrap: wrap;
@@ -20,6 +10,44 @@
     padding: 2rem 2rem;
 }
 
+.contact_button {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+    padding: 0.7rem;
+    width: 10.5rem;
+    height: 4rem;
+    border: none;
+    background-color: #901C1C;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.contact_button:hover {
+    background-color: #db8876;
+    color: #000;
+}
+
+/* Div "sorting" et sous-éléments "select", "option" */
+.sorting {
+    margin: 2rem 3.5rem;
+}
+
+select {
+    background-color: #901C1C;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 1rem 1rem;
+    margin-left: 1.5rem;
+    border-radius: 0.3rem;
+}
+
+option :hover {
+    background-color: #DB8876; /*inactif*/
+    color: #000;
+}
+
+/* Div "mediaList" et sous-div/sous-éléments "photographerWork", "media", "video", "caption", "title", "likes", "coeur"*/
 .mediaList {
     display: flex;
     justify-content: space-evenly;
@@ -46,9 +74,11 @@ video {
 }
 
 .caption {
-    width: 25rem;
-    font-size: 1.2rem;
+    display: flex;
+    justify-content: space-between;
     color: #901C1C;
+    width: 25rem;
+    font-size: 1.2rem;    
 }
 
 .title {
@@ -57,14 +87,23 @@ video {
 .likes {
     margin-left: auto;
 }
+.coeur {
+    padding-left: 0.3rem;
+    cursor: pointer;
+}
+.coeur:hover, .coeur:focus {
+    color:#DB8876
+}
 
+
+/* Div "photographerLikes" */
 .photographerLikes {
     display: flex;
     justify-content: space-around;
     align-items: center;
     position: fixed;
-    bottom: -15px;
-    right: 35px;
+    bottom: -0.9rem;
+    right: 2rem;
     background: #db8876;
     border-radius: .4166666667em;
     font-size: 1.2em;
@@ -74,40 +113,23 @@ video {
     z-index: 1;
 }
 
-.coeur {
-    cursor: pointer;
-}
-.coeur:hover, .coeur:focus {
-    color:#DB8876
-}
-
-i {
-    padding-left: 0.3rem;
-}
-
-.contact_button {
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    padding: 11px;
-    width: 170px;
-    height: 70px;
-    border: none;
-    background-color: #901C1C;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.contact_button:hover {
-    background-color: #db8876;
-    color: #000;
+/* Div "contact_modal" et sous-div/sous-éléments "modal", header, h2, span, p, "photographer_name" */
+#contact_modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background: rgba(196, 196, 196, 0.4);
 }
 
 .modal {
     border-radius: 1rem;
     background-color: #DB8876;
-    width: 50vw;
-    height: 100vh;
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -121,6 +143,12 @@ i {
     align-items: center;
 }
 
+.modal h2 {
+    font-size: 3rem;
+    font-weight: normal;
+    /*text-align: center;*/
+}
+
 .modal span {
     cursor: pointer;
     font-size: 3rem;
@@ -130,26 +158,32 @@ i {
     color:white;
 }
 
-.modal h2 {
-    font-size: 4rem;
-    font-weight: normal;
-    text-align: center;
-}
-
 .modal p {
     font-size: 4rem;
     font-weight: normal;
     text-align: center;
 }
 
+.photographer_name div {
+    font-size: 3rem;
+}
 
+/* Formulaire de la modale et sous-div/sous-éléments "label", "input", "textarea", "form_send */
 .modal form {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
-    margin: 0 1rem;
-    padding: 2rem 2rem;
+    /*margin: 0 1rem;
+    padding: 1rem 2rem;*/
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: self-start;
+    margin-bottom: 1.6rem;
 }
 
 form label {
@@ -158,18 +192,10 @@ form label {
     font-weight: bold;
 }
 
-form div {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: self-start;
-    margin-bottom: 26px;
-}
-
 form input, textarea {
     width: 100%;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.3rem;
 }
 form input {
     height: 4rem;
@@ -177,41 +203,36 @@ form input {
 textarea {
     font-size: 8rem;
 }
-select {
-    background-color: #901C1C;
-    color: #FFFFFF;
-    font-weight: bold;
-    padding: 1rem 1rem;
-    margin-left: 1.5rem;
-    border-radius: 0.3rem;
+
+.form_send {
+    display: flex;
+    justify-content: left;
 }
 
-option :hover {
-    background-color: #DB8876; /*inactif*/
-    color: #000;
-}
-
+/* Media queries : adaptabilité du design sur petit écran */
 @media screen and (min-width: 360px) and (max-width: 800px) {
     .marketingHook, .photographerPortrait {
         padding-bottom: 2vh;
         justify-content:space-between;
     }
     button {
-        margin-bottom, margin-top: 2vh;
+        margin-bottom: 4vh;
+        margin-top: 3vh;
     }
     .photograph-header {
         display: flex;
         flex-direction: column;
     }
+    .modal {
+        width: 80%;
+    }
 }
 
-/* Lightbox */
+/* Div "lightbox" et sous-div/sous-éléments : "lightbox__close", "lightbox__prev", "lightbox__next", "lightbox__container", "hiddenImage", "hiddenVideo", "lightbox__caption" */
 
 .lightbox {
     display: none;
     margin: auto auto;
-    align-items: center;
-    justify-content: center;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -229,9 +250,9 @@ option :hover {
     z-index: 1;
     color: #901C1C;
     position: absolute;
-    top: 10px;
-    right: 25px;
-    font-size: 35px;
+    top: 0.6rem;
+    right: 1.5rem;
+    font-size: 2.2rem;
 }
 
 .lightbox__next, .lightbox__prev {
@@ -240,18 +261,23 @@ option :hover {
     position: absolute;
     top: 50%;
     width: auto;
-    padding: 16px;
-    margin-top: -50px;
+    padding: 1rem;
+    margin-top: -3rem;
     color: #901C1C;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 1.5rem;
     transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
+    border-radius: 0 0.2rem 0.2rem 0;
 }
 
 .lightbox__next {
     right: 0;
-    border-radius: 3px 0 0 3px;
+    border-radius: 0.2rem 0 0 0.2rem;
+    margin-right: 7vw;
+}
+
+.lightbox__prev {
+    margin-left: 7vw;
 }
 
 .lightbox__close:hover,
@@ -265,24 +291,30 @@ option :hover {
     cursor: pointer;
 }
 
-.lightbox__caption {
-    color: #901C1C;
-    font-size: 1.5rem;
-    line-height: 2rem;
+.lightbox__container {
+    display: grid;
+    grid-template-rows: auto;
+    height: auto;
+    width: auto;
+    justify-content: center; 
+    margin: auto;
 }
 
 .hiddenImage, .hiddenVideo {
-    margin: auto auto;
     display: none;
-    align-items: center;
-    justify-content: center;
-    height: 80%;
-    width: 80%;
+    margin: auto auto;
+    height: 90vh;
+    width: auto;
+    padding: 1rem 1rem;
     object-fit: cover;
 }
 
-.caption {
+.lightbox__caption {
     color: #901C1C;
+    font-size: 1.3rem;
+    height: auto;
+    width: auto;
+    padding: 0 1rem;
 }
 
   

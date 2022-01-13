@@ -3,11 +3,11 @@
 function getPhotographersIdFromUrl() {
     const queryString = window.location.search;
     //?id=243&param2=toto
-    console.log("The query is " + queryString);
+    //console.log("The query is " + queryString);
     const urlParams = new URLSearchParams(queryString); //décompose fin de l'url
 
     const id = urlParams.get('id');
-    console.log(id);
+    //console.log(id);
     //243
     return id;
 }
@@ -54,7 +54,7 @@ function getMediaFromJson(photographerId, jsonObj) {
             resultArray.push(mediaArray[i]);   
         }
     }
-    console.log("Les objets media sont " + resultArray); //Pourquoi?
+    //console.log("Les objets media sont " + resultArray); //Pourquoi?
     return resultArray;
 }
 
@@ -87,8 +87,8 @@ function generatePhotographerNameInModal(photographer) {
     photographerNameInModal.classList.add('photographer_name');
 
     photographerNameInModal.innerHTML = 
-        '<div>' + photographer.name + '</div>';
-    console.log(photographerNameInModal.innerHTML + " : photographer's name");
+        '<div aria-label="photographer\'s name">' + photographer.name + '</div>';
+    //console.log(photographerNameInModal.innerHTML + " : photographer's name");
 
     modalHeader.appendChild(photographerNameInModal);
 }
@@ -99,12 +99,12 @@ function generateSectionPhotograph(photographer) {
     let sectionPhotograph = document.createElement('div');
     sectionPhotograph.classList.add('PhotographerData');
     sectionPhotograph.innerHTML =
-        '<div class="name">' + photographer.name + '</div>' + 
-        '<div class="location">' + photographer.city + ', ' + photographer.country + '</div>' + 
-        '<div class="marketingHook">' + photographer.tagline + '</div>';
+        '<div class="name" aria-label="photographer\'s name">' + photographer.name + '</div>' + 
+        '<div class="location" aria-label="photographer\'s location">' + photographer.city + ', ' + photographer.country + '</div>' + 
+        '<div class="marketingHook" aria-label="photographer\'s marketing hook">' + photographer.tagline + '</div>';
 
-    console.log(sectionPhotograph.innerHTML);
-    console.log(photographHeader.innerHTML);
+    //console.log(sectionPhotograph.innerHTML);
+    //console.log(photographHeader.innerHTML);
 
     photographHeader.appendChild(sectionPhotograph);
 }
@@ -129,8 +129,8 @@ function generateSectionPortrait(photographer) {
     sectionPortrait.innerHTML = 
         '<div class="portrait"> <img src="Photos/Photographers ID Photos/' + photographer.portrait + '"/> </div>' 
 
-    console.log(sectionPortrait.innerHTML);
-    console.log(photographHeader.innerHTML);
+    //console.log(sectionPortrait.innerHTML);
+    //console.log(photographHeader.innerHTML);
 
     photographHeader.appendChild(sectionPortrait);
 }
@@ -148,11 +148,11 @@ function generatePhotographerWork(photographerMedia, photographer) {
         //console.log("========================>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="divMedia"> <img class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<a href="#"> <div class="divMedia"> <img class="media" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur"> </i></div>';
         } else if (mediaElement.video) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="divMedia"> <video class="media" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+            '<a href="#"> <div class="divMedia"> <video class="media" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur"></i>  </div>';
         }
 
@@ -206,10 +206,10 @@ function installLikeEventListeners(coeurs) {
         coeur.addEventListener("click", e => {
             let valeurCompteurIndividuel = e.target.previousElementSibling;
             valeurCompteurIndividuel.innerHTML = parseInt(valeurCompteurIndividuel.innerHTML) + 1; //mise à jour de la valeur
-            console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
+            //console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
             let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
             valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
-            console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
+            //console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
         });
     });
 }
@@ -232,35 +232,75 @@ function displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo) {
         hiddenImage.setAttribute("src", source);
         hiddenImage.style.display = "block";
         hiddenVideo.style.display = "none";
-        console.log(source + " : source image");
+        //console.log(source + " : source image");
     } else if (source.endsWith(".mp4")) {
         hiddenVideo.setAttribute("src", source);
         hiddenVideo.style.display ="block";
         hiddenImage.style.display = "none";
-        console.log(source + " : source vidéo");
+        //console.log(source + " : source vidéo");
     }
 }
 
+//Fonction qui génère, dans la Lightbox, la légende sous chaque média affiché
+function generateMediaCaptionInLightbox(media) {
+    let title = media.getAttribute("aria-label");
+    
+    let lightboxCaption = document.createElement('p');
+    lightboxCaption.classList.add('lightbox__caption');
+    //lightboxCaption.setAttribute("aria-label", title);
+    lightboxCaption.innerHTML = title;
+    console.log(title + " : légende de l'image");
+
+    let oldLightboxCaption = document.querySelector(".lightbox__caption");
+    console.log(oldLightboxCaption + " : oldLigt");
+
+    let lightboxContainer = document.querySelector(".lightbox__container");
+
+    if (oldLightboxCaption == null) {
+        console.log("append");
+        lightboxContainer.appendChild(lightboxCaption);  
+    } else {
+        console.log("replace");
+        console.log(oldLightboxCaption.className + " : oldLigt");
+        lightboxContainer.replaceChild(lightboxCaption, oldLightboxCaption);   
+    }
+    
+    //lightboxCaption.style.display= "block"; //légende n'est pas affichée
+}
+
 //Fonctions qui permettent d'afficher les diapositives courante, suivante et précédente de la Lightbox
+
 function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
     allMediaArray.forEach(media => {
         media.addEventListener("click", e => {
             let source = e.target.getAttribute("src"); // image ou vidéo cliquée
             globalIndex = allMediaArray.indexOf(e.target);
-            console.log(source + " : source");
-            console.log(globalIndex + " : index");
+            //console.log(source + " : source");
+            //console.log(globalIndex + " : index");
             displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+            generateMediaCaptionInLightbox(media);
+        })
+        media.addEventListener("keyup", e => {
+            if (e.keypress === "Enter") {
+                let source = e.target.getAttribute("src"); // image ou vidéo cliquée
+                globalIndex = allMediaArray.indexOf(e.target);
+                //console.log(source + " : source");
+                //console.log(globalIndex + " : index");
+                displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+                generateMediaCaptionInLightbox(media);
+            }
         })
     })
 }
+
 
 function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxNext = document.querySelector(".lightbox__next");
 
     lightboxNext.addEventListener("click", e => {
         globalIndex = globalIndex + 1;
-        console.log(globalIndex + " : indexNext");
-        console.log(allMediaArray + " : allMediaArray");
+        //console.log(globalIndex + " : indexNext");
+        //console.log(allMediaArray + " : allMediaArray");
 
         if (globalIndex > allMediaArray.length - 1){
             globalIndex = 0;
@@ -268,6 +308,7 @@ function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
 
         let source = allMediaArray[globalIndex].getAttribute('src');
         displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+        generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
     })
 }
 
@@ -276,7 +317,7 @@ function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
 
     lightboxPrev.addEventListener("click", e => {
         globalIndex = globalIndex - 1;
-        console.log(globalIndex + " : indexPrev");
+        //console.log(globalIndex + " : indexPrev");
 
         if (globalIndex < 0) {
             globalIndex = allMediaArray.length - 1;
@@ -284,6 +325,7 @@ function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
 
         let source = allMediaArray[globalIndex].getAttribute("src");
         displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+        generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
     })
 }
 
@@ -297,15 +339,15 @@ fetch ("FishEyeData.json")
   // Récupération de données
     let photographerId = getPhotographersIdFromUrl();
     let photographer = getPhotographerFromJson(photographerId, jsonObj);
-    console.log(photographer); 
+    //console.log(photographer); 
 
     let photographerMedia = getMediaFromJson(photographerId, jsonObj);
-    console.log(photographerMedia);
+    //console.log(photographerMedia);
 
     let nombreTotalDeLikes = calculNombreTotalDeLikes(photographerMedia);
 
     let tarifJournalier = photographer.price;
-    console.log("----------------" + tarifJournalier);
+    //console.log("----------------" + tarifJournalier);
 
     // Génération du HTML
     generateSectionPhotograph(photographer);
@@ -321,9 +363,11 @@ fetch ("FishEyeData.json")
     // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
     let contactModal = document.getElementById("contact_modal");
     let contactMe = document.querySelector(".contact_me");
+    let noScrollBody = document.querySelector(".no-scroll");
         
     contactMe.addEventListener("click", function(){
         contactModal.style.display="block";
+        noScrollBody.style.overflow="hidden";
     });
 
     // Listeners sur les coeurs
