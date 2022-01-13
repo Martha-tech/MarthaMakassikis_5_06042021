@@ -11,62 +11,63 @@
     <title>Fisheye - photographe </title>
   </head>
 
-  <body>
+  <body class="no-scroll scroll">
     <header>
       <div class="logo"><a href="index.html"><img src="assets/images/logo.png" class="logo" /></a></div>
     </header>
 
     <main id="main">
-        <div class="photograph-header">
-               
-        </div>
-        <div class="sorting">
-          <form>
-            <label for="sorting-select"> Trier par   
-              <select name="sorting" id="sorting-select">
-                <option value="" selected disabled hidden></option>
-                <option value="popularity" class="sortByPopularity">Popularité</option>
-                <option value="date" class="sortByDate">Date</option>
-                <option value="title" class="sortByTitle">Titre</option>
-              </select>
-            </label>
-          </form>
-        </div>
-        <div class="mediaList">
-          <!-- HTML généré à partir du fichier "photographer.js" -->
-        </div>
-        <div class="photographerLikes">
-          <!-- HTML généré à partir du fichier "photographer.js" -->
-        </div>
+      <div class="photograph-header">
+        <!-- HTML généré à partir du fichier "photographer.js" -->    
+      </div>
+      <div class="sorting">
+        <form>
+          <label for="sorting-select"> Trier par   
+            <select name="sorting" id="sorting-select">
+              <option value="" selected disabled hidden></option>
+              <option value="popularity" class="sortByPopularity">Popularité</option>
+              <option value="date" class="sortByDate">Date</option>
+              <option value="title" class="sortByTitle">Titre</option>
+            </select>
+          </label>
+        </form>
+      </div>
+      <div class="mediaList">
+        <!-- HTML généré à partir du fichier "photographer.js" -->
+      </div>
+      <div class="photographerLikes">
+        <!-- HTML généré à partir du fichier "photographer.js" -->
+      </div>
     </main>
 
     <div id="contact_modal">
-        <div class="modal">
-            <header class="modal_header">
-              <h2>Contactez-moi</h2> 
-              <span class="close_modal" onclick="closeModal()"><i class="fas fa-times"></i></span>
-              <!--<p class="photographer_name"></p>-->
-            </header>
-            <form>
-                <div>
-                    <label for="prenom">Prénom</label>
-                    <input type="text" id="prenom"/>
-                </div>
-                <div>
-                  <label for="nom">Nom</label>
-                  <input type="text" id="nom"/>
-                </div>
-                <div>
-                  <label for="email">Email</label>
-                  <input type="text" id="email"/>
-                </div>
-                <div>
-                  <label for="message">Votre message</label>
-                  <textarea id="message"></textarea>
-                </div>
-                <button class="contact_button">Envoyer</button>
-            </form>
-        </div>
+      <div class="modal">
+        <header class="modal_header">
+          <h2>Contactez-moi</h2> 
+          <span class="close_modal" onclick="closeModal()"><i class="fas fa-times"></i></span> 
+          <br>
+          <!--<p class="photographer_name"></p>-->
+        </header>
+        <form>
+          <div>
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom"/>
+          </div>
+          <div>
+            <label for="nom">Nom</label>
+            <input type="text" id="nom"/>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input type="text" id="email"/>
+          </div>
+          <div>
+            <label for="message">Votre message</label>
+            <textarea id="message"></textarea>
+          </div>
+          <button class="contact_button form_send" onclick="closeModal()">Envoyer</button>
+        </form>
+      </div>
     </div>
 
     <!--lightbox-->
@@ -75,12 +76,10 @@
       <a class="lightbox__prev" >&#10094;</a>
       <a class="lightbox__next" >&#10095;</a>
       <div class="lightbox__container">
-        <img class= "hiddenImage" src="Photos/Ellie Rose Wilkens/Architecture_Connected_Curves.jpg" alt="Connected Curves">
-        <video class= "hiddenVideo" src="Photos/Ellie Rose Wilkens/Sport_Tricks_in_the_air.mp4" alt="Tricks in the Air" controls></video>
-        <div class="lightbox__caption"></div>
-      </div>
-      
-      
+        <img class= "hiddenImage" src="Photos/Ellie Rose Wilkens/Architecture_Connected_Curves.jpg">
+        <video class= "hiddenVideo" src="Photos/Ellie Rose Wilkens/Sport_Tricks_in_the_air.mp4" controls></video>
+        <!--<div class="lightbox__caption"></div>-->
+      </div> 
     </div>
     
 
