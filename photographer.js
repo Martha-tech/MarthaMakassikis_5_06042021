@@ -82,7 +82,7 @@ function isImage(filename) {
 
 //Fonction qui génère, dans la modale de contact, le nom et le prénom du photographe
 function generatePhotographerNameInModal(photographer) {
-    let modalHeader = document.querySelector(".modal_header");
+    let modalHeaderText = document.querySelector(".modal_header_text");
     let photographerNameInModal = document.createElement ('p');
     photographerNameInModal.classList.add('photographer_name');
 
@@ -90,12 +90,12 @@ function generatePhotographerNameInModal(photographer) {
         '<div aria-label="photographer\'s name">' + photographer.name + '</div>';
     //console.log(photographerNameInModal.innerHTML + " : photographer's name");
 
-    modalHeader.appendChild(photographerNameInModal);
+    modalHeaderText.appendChild(photographerNameInModal);
 }
 
-//Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif aux données du photographe
+//Fonction qui génère, dans la DIV "photographerHeader", le contenu HTML relatif aux données du photographe
 function generateSectionPhotograph(photographer) {
-    let photographHeader = document.querySelector(".photograph-header");
+    let photographerHeader = document.querySelector(".photographer-header");
     let sectionPhotograph = document.createElement('div');
     sectionPhotograph.classList.add('PhotographerData');
     sectionPhotograph.innerHTML =
@@ -104,25 +104,25 @@ function generateSectionPhotograph(photographer) {
         '<div class="marketingHook" aria-label="photographer\'s marketing hook">' + photographer.tagline + '</div>';
 
     //console.log(sectionPhotograph.innerHTML);
-    //console.log(photographHeader.innerHTML);
+    //console.log(photographerHeader.innerHTML);
 
-    photographHeader.appendChild(sectionPhotograph);
+    photographerHeader.appendChild(sectionPhotograph);
 }
 
-//Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif au bouton pour contacter le photographe
+//Fonction qui génère, dans la DIV "photographerHeader", le contenu HTML relatif au bouton pour contacter le photographe
 function generateSectionButton() {
-    let photographHeader = document.querySelector(".photograph-header");
+    let photographerHeader = document.querySelector(".photographer-header");
     let sectionButton = document.createElement('button');
     sectionButton.classList.add('contact_button');
     sectionButton.classList.add('contact_me');
-    sectionButton.setAttribute("onclick", "displayModal()")
+    //sectionButton.setAttribute("onclick", "displayModal()")
     sectionButton.innerHTML = 'Contactez-moi';
-    photographHeader.appendChild(sectionButton);
+    photographerHeader.appendChild(sectionButton);
 }
 
-//Fonction qui génère, dans la DIV "photographHeader", le contenu HTML relatif à la photo du photographe
+//Fonction qui génère, dans la DIV "photographerHeader", le contenu HTML relatif à la photo du photographe
 function generateSectionPortrait(photographer) {
-    let photographHeader = document.querySelector(".photograph-header");
+    let photographerHeader = document.querySelector(".photographer-header");
     let sectionPortrait = document.createElement('div');
     
     sectionPortrait.classList.add('photographerPortrait');
@@ -130,9 +130,9 @@ function generateSectionPortrait(photographer) {
         '<div class="portrait"> <img src="Photos/Photographers ID Photos/' + photographer.portrait + '"/> </div>' 
 
     //console.log(sectionPortrait.innerHTML);
-    //console.log(photographHeader.innerHTML);
+    //console.log(photographerHeader.innerHTML);
 
-    photographHeader.appendChild(sectionPortrait);
+    photographerHeader.appendChild(sectionPortrait);
 }
 
 //Fonction qui génère, dans la DIV "mediaList", le contenu HTML relatif aux oeuvres (picturales et animées) du photographe
@@ -172,7 +172,7 @@ function displayCompteurGlobal(nombreTotalDeLikes) {
     let sectionCompteurLikes = document.createElement('span');
     sectionCompteurLikes.classList.add('compteurLikes');
     sectionCompteurLikes.innerHTML =
-        '<span class="valeurCompteurGlobal">' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i>';
+        '<span class="valeurCompteurGlobal" aria-label="nombre total de likes du photographe">' + nombreTotalDeLikes + '</span> <i class="fas fa-heart"></i>';
 
     photographerLikes.appendChild(sectionCompteurLikes);
 }
@@ -186,7 +186,7 @@ function displayTarif(tarifJournalier) {
 
     sectionPricePerDay.classList.add('pricePerDay');
     sectionPricePerDay.innerHTML =
-        '<span>' + tarifJournalier + '€ / jour </span>';
+        '<span aria-label="tarif journalier du photographe">' + tarifJournalier + '€ / jour </span>';
 
     photographerLikes.appendChild(sectionPricePerDay);
 }
@@ -247,25 +247,22 @@ function generateMediaCaptionInLightbox(media) {
     
     let lightboxCaption = document.createElement('p');
     lightboxCaption.classList.add('lightbox__caption');
-    //lightboxCaption.setAttribute("aria-label", title);
     lightboxCaption.innerHTML = title;
-    console.log(title + " : légende de l'image");
+    //console.log(title + " : légende de l'image");
 
     let oldLightboxCaption = document.querySelector(".lightbox__caption");
-    console.log(oldLightboxCaption + " : oldLigt");
+    //console.log(oldLightboxCaption + " : oldLightbox");
 
     let lightboxContainer = document.querySelector(".lightbox__container");
 
     if (oldLightboxCaption == null) {
-        console.log("append");
+        //console.log("append");
         lightboxContainer.appendChild(lightboxCaption);  
     } else {
-        console.log("replace");
-        console.log(oldLightboxCaption.className + " : oldLigt");
+        //console.log("replace");
+        //console.log(oldLightboxCaption.className + " : oldLightbox");
         lightboxContainer.replaceChild(lightboxCaption, oldLightboxCaption);   
     }
-    
-    //lightboxCaption.style.display= "block"; //légende n'est pas affichée
 }
 
 //Fonctions qui permettent d'afficher les diapositives courante, suivante et précédente de la Lightbox
@@ -273,6 +270,7 @@ function generateMediaCaptionInLightbox(media) {
 function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
     allMediaArray.forEach(media => {
         media.addEventListener("click", e => {
+            console.log("plouf 1");
             let source = e.target.getAttribute("src"); // image ou vidéo cliquée
             globalIndex = allMediaArray.indexOf(e.target);
             //console.log(source + " : source");
@@ -281,10 +279,11 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
             generateMediaCaptionInLightbox(media);
         })
         media.addEventListener("keyup", e => {
+            console.log("plouf");
             if (e.keypress === "Enter") {
                 let source = e.target.getAttribute("src"); // image ou vidéo cliquée
                 globalIndex = allMediaArray.indexOf(e.target);
-                //console.log(source + " : source");
+                console.log(source + " : source");
                 //console.log(globalIndex + " : index");
                 displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
                 generateMediaCaptionInLightbox(media);
@@ -292,7 +291,6 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
         })
     })
 }
-
 
 function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxNext = document.querySelector(".lightbox__next");
@@ -329,7 +327,38 @@ function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
     })
 }
 
+/*window.addEventListener("keyup", e => {
+    if (e.keypress === "ArrowRight") {
+        displayLightboxNextSlide();
+    } else if (e.keypress === "ArrowLeft") {
+        displayLightboxPreviousSlide();
+    } else if (e.keypress === "Escape") {
+        closeModal();
+    }
+})*/
 
+// Fonctions d'ouverture et de fermeture de la modale
+
+function displayModal() {
+    let contactModal = document.getElementById("contact_modal");
+    let noScrollBody = document.querySelector(".no-scroll");
+
+    console.log("display modal entree");
+    contactModal.style.display = "block";
+    noScrollBody.style.overflow = "hidden";
+    console.log("display modal sortie");
+}
+
+function closeModal(event) {
+    event.preventDefault();
+    let contactModal = document.getElementById("contact_modal");
+    let scrollBody = document.querySelector(".scroll");
+
+    console.log("close modal entree");
+    contactModal.style.display = "none";
+    scrollBody.style.overflow = "auto";
+    console.log("close modal sortie");
+ }
 
 /* ---------------------- FETCH -------------------- */
 fetch ("FishEyeData.json")
@@ -361,14 +390,16 @@ fetch ("FishEyeData.json")
     displayTarif(tarifJournalier);
     
     // Listener sur le bouton "Contactez-moi" pour déclencher l'ouverture de la modale
-    let contactModal = document.getElementById("contact_modal");
     let contactMe = document.querySelector(".contact_me");
-    let noScrollBody = document.querySelector(".no-scroll");
-        
-    contactMe.addEventListener("click", function(){
-        contactModal.style.display="block";
-        noScrollBody.style.overflow="hidden";
-    });
+    contactMe.addEventListener("click", displayModal);
+
+    // Listener sur le bouton "Envoyer" pour déclencher la fermeture de la modale
+    let formSendButton = document.querySelector(".form_send");
+    formSendButton.addEventListener("click", closeModal);
+
+    // Listener sur la croix "x" pour déclencher la fermeture de la modale
+    let closeButton = document.querySelector(".close_modal");
+    closeButton.addEventListener("click", closeModal);
 
     // Listeners sur les coeurs
     const coeurs = document.querySelectorAll(".coeur");

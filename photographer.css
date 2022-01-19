@@ -1,5 +1,5 @@
-/* Div "photograph-header" et sous-élément "contact_button"*/
-.photograph-header {
+/* Div "photographer-header" et sous-élément "contact_button"*/
+.photographer-header {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -140,13 +140,16 @@ video {
 .modal header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
 .modal h2 {
     font-size: 3rem;
     font-weight: normal;
-    /*text-align: center;*/
+}
+
+.modal p {
+    font-size: 3rem;
+    font-weight: normal;
 }
 
 .modal span {
@@ -156,12 +159,6 @@ video {
     display: flex;
     justify-content: left;
     color:white;
-}
-
-.modal p {
-    font-size: 4rem;
-    font-weight: normal;
-    text-align: center;
 }
 
 .photographer_name div {
@@ -188,7 +185,7 @@ form div {
 
 form label {
     color: #312E2E;
-    font-size: 1rem;
+    font-size: 2rem;
     font-weight: bold;
 }
 
@@ -196,17 +193,25 @@ form input, textarea {
     width: 100%;
     border: none;
     border-radius: 0.3rem;
+    padding: 0.7rem 0.7rem;
+    font-size: 2rem;
 }
 form input {
     height: 4rem;
 }
 textarea {
-    font-size: 8rem;
+    font-size: 2rem;
 }
 
 .form_send {
     display: flex;
     justify-content: left;
+    align-content: center;
+}
+
+.form_send:hover {
+    background-color: #901C1C;
+    color: #FFFFFF;
 }
 
 /* Media queries : adaptabilité du design sur petit écran */
@@ -219,7 +224,7 @@ textarea {
         margin-bottom: 4vh;
         margin-top: 3vh;
     }
-    .photograph-header {
+    .photographer-header {
         display: flex;
         flex-direction: column;
     }
