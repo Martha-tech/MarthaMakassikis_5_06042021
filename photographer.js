@@ -115,7 +115,6 @@ function generateSectionButton() {
     let sectionButton = document.createElement('button');
     sectionButton.classList.add('contact_button');
     sectionButton.classList.add('contact_me');
-    //sectionButton.setAttribute("onclick", "displayModal()")
     sectionButton.innerHTML = 'Contactez-moi';
     photographerHeader.appendChild(sectionButton);
 }
@@ -142,18 +141,19 @@ function generatePhotographerWork(photographerMedia, photographer) {
     
     photographerMedia.forEach(mediaElement => {
         let sectionMedia = document.createElement('div');
+        sectionMedia.setAttribute("tabindex", -1);
         
         sectionMedia.classList.add('photographerWork');
 
-        //console.log("========================>" + mediaElement.image);
+        //console.log("===>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="divMedia"> <img class="media" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
-            '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur"> </i></div>';
+            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur" tabindex="0"> </i></div>';
         } else if (mediaElement.video) {
             sectionMedia.innerHTML =
-            '<a href="#"> <div class="divMedia"> <video class="media" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
-            '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur"></i>  </div>';
+            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <video class="media" tabindex="0" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+            '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur" tabindex="0"></i>  </div>';
         }
 
         //console.log(sectionMedia.innerHTML);
@@ -210,6 +210,16 @@ function installLikeEventListeners(coeurs) {
             let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
             valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
             //console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
+        });
+        coeur.addEventListener("keyup", e => {
+            let valeurCompteurIndividuel = e.target.previousElementSibling;
+            if (e.key === "Enter") {
+                valeurCompteurIndividuel.innerHTML = parseInt(valeurCompteurIndividuel.innerHTML) + 1; //mise à jour de la valeur
+                //console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
+                let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
+                valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
+                //console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
+            }
         });
     });
 }
@@ -269,7 +279,6 @@ function generateMediaCaptionInLightbox(media) {
 
 function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
     allMediaArray.forEach(media => {
-        //media.addEventListener("click", displayMediaInLightbox);
         media.addEventListener("click", e => {
             let source = e.target.getAttribute("src"); // image ou vidéo cliquée
             globalIndex = allMediaArray.indexOf(e.target);
@@ -279,13 +288,11 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
             generateMediaCaptionInLightbox(media);
         });
         media.addEventListener("keyup", e => {
-            console.log("plouf 2 " + e.key);
+            //console.log("plouf 2 " + e.key);
             if (e.key === "Enter") {
-                //console.log("plouf 3");
+                //console.log(e.target);
                 let source = e.target.getAttribute("src"); // image ou vidéo cliquée
                 globalIndex = allMediaArray.indexOf(e.target);
-                //console.log(source + " : source");
-                //console.log(globalIndex + " : index");
                 displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
                 generateMediaCaptionInLightbox(media);
             }
@@ -293,7 +300,25 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
     });
 }
 
-// installLightboxNextSlideOnClickListeners
+// installClickListenersOnLightboxNextSlide
+function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
+    let lightboxNext = document.querySelector(".lightbox__next");
+    console.log("displayLightboxNextSlide");
+    lightboxNext.addEventListener("click", e => {
+        globalIndex = globalIndex + 1;
+        //console.log(globalIndex + " : indexNext");
+        //console.log(allMediaArray + " : allMediaArray");
+
+        if (globalIndex > allMediaArray.length - 1){
+            globalIndex = 0;
+        } 
+
+        let source = allMediaArray[globalIndex].getAttribute('src');
+        displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+        generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
+    });
+}
+
 function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxNext = document.querySelector(".lightbox__next");
     console.log("displayLightboxNextSlide");
@@ -368,18 +393,19 @@ function addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVide
     });
 }
 
-
-
 // Fonctions d'ouverture et de fermeture de la modale
 
 function displayModal() {
     let contactModal = document.getElementById("contact_modal");
     let noScrollBody = document.querySelector(".no-scroll");
 
-    console.log("display modal entree");
+    //console.log("display modal entree");
     contactModal.style.display = "block";
     noScrollBody.style.overflow = "hidden";
-    console.log("display modal sortie");
+    //console.log("display modal sortie");
+
+    let inputFirstname = document.getElementById("prenom");
+    inputFirstname.focus(); //ne fonctionne pas
 }
 
 function closeModal(event) {
@@ -387,11 +413,72 @@ function closeModal(event) {
     let contactModal = document.getElementById("contact_modal");
     let scrollBody = document.querySelector(".scroll");
 
-    console.log("close modal entree");
+    //console.log("close modal entree");
     contactModal.style.display = "none";
     scrollBody.style.overflow = "auto";
-    console.log("close modal sortie");
- }
+    //console.log("close modal sortie");
+
+    let closeModalCross = document.querySelector(".close_modal");
+    closeModalCross.addEventListener("keyup", e => {
+        closeModal;
+    }); //ne fonctionne pas
+}
+
+// Fonctions triant les médias du photographe 
+
+// Fonction de tri des médias par popularité (nombre de "likes"), dans un ordre décroissant
+    
+function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo) {
+    let sortByPopularity = document.querySelector(".sortByPopularity");
+    sortByPopularity.addEventListener("click", e => {
+        photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
+        generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
+        
+        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+        const coeurs = document.querySelectorAll(".coeur");
+        installLikeEventListeners(coeurs);
+    });
+}
+
+ // Fonction de tri des médias par date (year-month-day), dans un ordre croissant
+
+ function sortMediaByDate(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo) {
+    let sortByDate = document.querySelector(".sortByDate");
+    sortByDate.addEventListener("click", e => {
+        photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
+        generatePhotographerWork(photographerMedia, photographer);
+        //La date, dans le json, est exprimée sous forme de chaîne de caractères. On recourt à "Date.parse()" pour convertir le string en objet de type "date".
+        //On prend l'attribut "date" de l'objet "a". On le passe en paramètre à la méthode "Date.parse" pour convertir la chaîne de caractères en date.
+
+        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+        const coeurs = document.querySelectorAll(".coeur");
+        installLikeEventListeners(coeurs);
+    });
+}
+
+// Fonction de tri des médias par titre (ordre alphabétique), dans un ordre croissant
+
+function sortMediaByTitle(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo) {
+    let sortByTitle = document.querySelector(".sortByTitle");
+    sortByTitle.addEventListener("click", e => {
+        photographerMedia.sort(function compareMedia(a, b) {return a.title > b.title;});
+        //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
+        generatePhotographerWork(photographerMedia, photographer);
+
+        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+        const coeurs = document.querySelectorAll(".coeur");
+        installLikeEventListeners(coeurs);
+    });
+}
 
 /* ---------------------- FETCH -------------------- */
 fetch ("FishEyeData.json")
@@ -426,13 +513,17 @@ fetch ("FishEyeData.json")
     let contactMe = document.querySelector(".contact_me");
     contactMe.addEventListener("click", displayModal);
 
-    // Listener sur le bouton "Envoyer" pour déclencher la fermeture de la modale
-    let formSendButton = document.querySelector(".form_send");
-    formSendButton.addEventListener("click", closeModal);
-
-    // Listener sur la croix "x" pour déclencher la fermeture de la modale
+    // Listeners sur la croix "x" et sur le bouton "Envoyer" pour déclencher la fermeture de la modale
     let closeButton = document.querySelector(".close_modal");
     closeButton.addEventListener("click", closeModal);
+    window.addEventListener("keyup", e => {
+        if (e.key === "Escape") {
+            closeModal();
+        };
+    }) //ne fonctionne pas
+
+    let formSendButton = document.querySelector(".form_send");
+    formSendButton.addEventListener("click", closeModal);
 
     // Listeners sur les coeurs
     const coeurs = document.querySelectorAll(".coeur");
@@ -448,68 +539,11 @@ fetch ("FishEyeData.json")
     displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
     addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVideo);
 
-    // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre & ouverture de la Lightbox & coeurs
-
-    /* sort entries in photographerMedia by popularity (like count), in descending order*/
-    let sortByPopularity = document.querySelector(".sortByPopularity");
-
-    sortByPopularity.addEventListener("click", e => {
-        photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
-        generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
-
-        let hiddenImage = document.querySelector(".hiddenImage");
-        let hiddenVideo = document.querySelector(".hiddenVideo");
-        let allMediaArray = [...document.querySelectorAll(".media")];
-        
-        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
-        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
-        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
-
-        const coeurs = document.querySelectorAll(".coeur");
-        installLikeEventListeners(coeurs);
-    });
-
-    /* sort entries in photographerMedia by date value (year-month-day), in ascending order*/
-    let sortByDate = document.querySelector(".sortByDate");
-
-    sortByDate.addEventListener("click", e => {
-        photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
-        generatePhotographerWork(photographerMedia, photographer);
-        //La date, dans le json, est exprimée sous forme de chaîne de caractères. On recourt à "Date.parse()" pour convertir le string en objet de type "date".
-        //On prend l'attribut "date" de l'objet "a". On le passe en paramètre à la méthode "Date.parse" pour convertir la chaîne de caractères en date.
+    // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre
+    sortMediaByPopularity(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo);
+    sortMediaByDate(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo); 
+    sortMediaByTitle(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo);
     
-        let hiddenImage = document.querySelector(".hiddenImage");
-        let hiddenVideo = document.querySelector(".hiddenVideo");
-        let allMediaArray = [...document.querySelectorAll(".media")];
-        
-        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
-        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
-        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
-
-        const coeurs = document.querySelectorAll(".coeur");
-        installLikeEventListeners(coeurs);
-    });
-
-    /* sort entries in photographerMedia by title (alphabetical order), in ascending order*/
-    let sortByTitle = document.querySelector(".sortByTitle");
-
-    sortByTitle.addEventListener("click", e => {
-        photographerMedia.sort(function compareMedia(a, b) {return a.title > b.title;});
-        //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
-        generatePhotographerWork(photographerMedia, photographer);
-   
-        let hiddenImage = document.querySelector(".hiddenImage");
-        let hiddenVideo = document.querySelector(".hiddenVideo");
-        let allMediaArray = [...document.querySelectorAll(".media")];
-        
-        displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
-        displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
-        displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
-
-        const coeurs = document.querySelectorAll(".coeur");
-        installLikeEventListeners(coeurs);
-    });
-
 })
 
 /*------------------------------FIN DU FETCH-------------------------*/
