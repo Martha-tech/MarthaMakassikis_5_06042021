@@ -256,7 +256,6 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
             generateMediaCaptionInLightbox(media);
         });
         media.addEventListener("keyup", e => {
-            //console.log("plouf 2 " + e.key);
             console.log("keyup event detected " + e.key);
             if (e.key === "Enter") {
                 openLightbox();
@@ -340,7 +339,7 @@ function addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVide
             closeLightbox();
 
         } else {
-            console.log("window unsupported key " + e.key);
+            //console.log("window unsupported key " + e.key);
         }
     });
 }
@@ -383,6 +382,7 @@ function closeModal(event) {
 function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo) {
     let sortByPopularity = document.querySelector(".sortByPopularity");
     sortByPopularity.addEventListener("click", e => {
+        //console.log("entering sortByPopularity click");
         photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
         generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
         
@@ -392,6 +392,21 @@ function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, h
 
         const coeurs = document.querySelectorAll(".coeur");
         installLikeEventListeners(coeurs);
+    });
+    let sortingSelect = document.getElementById("sorting-select");
+    sortingSelect.addEventListener("keyup", e => {
+        if ((e.target.value === "popularity") && (e.key === "Enter")) {
+            console.log("sort by popularity on keyboard");
+            photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
+            generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
+            
+            displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+            displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+            displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+            const coeurs = document.querySelectorAll(".coeur");
+            installLikeEventListeners(coeurs);
+        }
     });
 }
 
@@ -412,6 +427,21 @@ function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, h
         const coeurs = document.querySelectorAll(".coeur");
         installLikeEventListeners(coeurs);
     });
+    let sortingSelect = document.getElementById("sorting-select");
+    sortingSelect.addEventListener("keyup", e => {
+        if ((e.target.value === "date") && (e.key === "Enter")) {
+            console.log("sort by date on keyboard");
+            photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
+            generatePhotographerWork(photographerMedia, photographer);
+
+            displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+            displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+            displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+            const coeurs = document.querySelectorAll(".coeur");
+            installLikeEventListeners(coeurs);
+        }
+    });
 }
 
 // Fonction de tri des médias par titre (ordre alphabétique), dans un ordre croissant
@@ -430,6 +460,22 @@ function sortMediaByTitle(photographerMedia, photographer, allMediaArray, hidden
         const coeurs = document.querySelectorAll(".coeur");
         installLikeEventListeners(coeurs);
     });
+    let sortingSelect = document.getElementById("sorting-select");
+    sortingSelect.addEventListener("keyup", e => {
+        if ((e.target.value === "title") && (e.key === "Enter")) {
+            //console.log("sort by title on keyboard");
+            photographerMedia.sort(function compareMedia(a, b) {return a.title > b.title;});
+            //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
+            generatePhotographerWork(photographerMedia, photographer);
+
+            displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
+            displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
+            displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
+
+            const coeurs = document.querySelectorAll(".coeur");
+            installLikeEventListeners(coeurs);
+        } 
+    });  
 }
 
 /* ---------------------- FETCH -------------------- */
