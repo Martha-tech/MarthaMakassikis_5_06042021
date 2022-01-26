@@ -12,7 +12,6 @@ function getPhotographersIdFromUrl() {
     return id;
 }
 
-//Réécrire avec un foreach, lever une alerte lorsque l'id est incorrect et tester
 function getPhotographerFromJson(id, jsonObj) {
     let photographersArray = jsonObj.photographers;
     let result;
@@ -27,24 +26,6 @@ function getPhotographerFromJson(id, jsonObj) {
     return result;
 }
 
-/*function getPhotographerFromJson(id, jsonObj) {
-    let photographersArray = jsonObj.photographers;
-    let result;
-    
-    photographersArray.forEach(photographer => {
-        if (photographer.id == id) {
-            result = photographersArray;
-            console.log("L'objet photographe est " + result.name)
-            break;
-        } else if (photographer.id != id) {
-            alert("L\'id est incorrect.");
-        }
-    }
-    return result;
-})
-*/
-
-// Réécrire avec un foreach ou un .filter ?
 function getMediaFromJson(photographerId, jsonObj) {
     let mediaArray = jsonObj.media;
     let resultArray = [];
@@ -57,19 +38,6 @@ function getMediaFromJson(photographerId, jsonObj) {
     //console.log("Les objets media sont " + resultArray); //Pourquoi?
     return resultArray;
 }
-
-/*function getMediaFromJson(photographerId, jsonObj) {
-    let mediaArray = jsonObj.media;
-    let resultArray = [];
-
-    mediaArray.forEach(media => {
-        if (mediaArray.photographer == photographerId) {
-            resultArray.push(mediaArray);
-        }
-    })
-    console.log("Les objets média sont " + resultArray);
-}
-*/
 
 // Fonction qui, selon l'extension du fichier, affichera une photo ou une vidéo
 function isImage(filename) {
@@ -319,24 +287,6 @@ function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     });
 }
 
-function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
-    let lightboxNext = document.querySelector(".lightbox__next");
-    console.log("displayLightboxNextSlide");
-    lightboxNext.addEventListener("click", e => {
-        globalIndex = globalIndex + 1;
-        //console.log(globalIndex + " : indexNext");
-        //console.log(allMediaArray + " : allMediaArray");
-
-        if (globalIndex > allMediaArray.length - 1){
-            globalIndex = 0;
-        } 
-
-        let source = allMediaArray[globalIndex].getAttribute('src');
-        displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-        generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
-    });
-}
-
 function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxPrev = document.querySelector(".lightbox__prev");
     console.log("displayLightboxPreviousSlide");
@@ -354,6 +304,7 @@ function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
     });
 }
 
+// juste sur la lightbox
 function addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVideo) {
     window.addEventListener("keyup", e => {
         console.log("window entree");
