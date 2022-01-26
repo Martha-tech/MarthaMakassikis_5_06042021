@@ -257,8 +257,9 @@ function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
         });
         media.addEventListener("keyup", e => {
             //console.log("plouf 2 " + e.key);
+            console.log("keyup event detected " + e.key);
             if (e.key === "Enter") {
-                //console.log(e.target);
+                openLightbox();
                 let source = e.target.getAttribute("src"); // image ou vidéo cliquée
                 globalIndex = allMediaArray.indexOf(e.target);
                 displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
