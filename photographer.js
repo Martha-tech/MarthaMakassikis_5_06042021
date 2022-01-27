@@ -243,101 +243,90 @@ function generateMediaCaptionInLightbox(media) {
 
 //Fonctions qui permettent d'afficher les diapositives courante, suivante et précédente de la Lightbox
 
+// Fonctions pour afficher la diapositive courante au clic de la souris et au clavier
+function handleCurrentSlide(e) {
+    //console.log("youhou!" + e.type);
+    openLightbox();
+    let source = e.target.getAttribute("src"); // image ou vidéo cliquée
+    let allMediaArray = [...document.querySelectorAll(".media")];
+    globalIndex = allMediaArray.indexOf(e.target);
+    //console.log(source + " : source");
+    //console.log(globalIndex + " : index");
+    let hiddenImage = document.querySelector(".hiddenImage");
+    let hiddenVideo = document.querySelector(".hiddenVideo");
+    displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+    generateMediaCaptionInLightbox(this);
+}
+
 function displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo) {
+    console.log("entering displayLightboxCurrentSlide");
     allMediaArray.forEach(media => {
-        media.addEventListener("click", e => {
-            let source = e.target.getAttribute("src"); // image ou vidéo cliquée
-            globalIndex = allMediaArray.indexOf(e.target);
-            //console.log(source + " : source");
-            //console.log(globalIndex + " : index");
-            displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-            generateMediaCaptionInLightbox(media);
-        });
+        media.addEventListener("click", handleCurrentSlide);
         media.addEventListener("keyup", e => {
-            console.log("keyup event detected " + e.key);
             if (e.key === "Enter") {
-                openLightbox();
-                let source = e.target.getAttribute("src"); // image ou vidéo cliquée
-                globalIndex = allMediaArray.indexOf(e.target);
-                displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-                generateMediaCaptionInLightbox(media);
+                handleCurrentSlide(e);
+            } else if (e.key === "Escape") {
+                closeLightbox();
             }
         });
     });
 }
 
-// installClickListenersOnLightboxNextSlide
+// Fonctions pour afficher la diapositive suivante au clic de la souris et au clavier
+function handleNextSlide(e) {
+    globalIndex = globalIndex + 1;
+    //console.log(globalIndex + " : indexNext");
+    let allMediaArray = [...document.querySelectorAll(".media")];
+    //console.log(allMediaArray);
+    console.log(globalIndex);
+    if (globalIndex > allMediaArray.length - 1){
+        globalIndex = 0;
+    }
+    let source = allMediaArray[globalIndex].getAttribute('src');
+    let hiddenImage = document.querySelector(".hiddenImage");
+    let hiddenVideo = document.querySelector(".hiddenVideo");
+    displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+    generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
+}
+
 function displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxNext = document.querySelector(".lightbox__next");
     console.log("displayLightboxNextSlide");
-    lightboxNext.addEventListener("click", e => {
-        globalIndex = globalIndex + 1;
-        //console.log(globalIndex + " : indexNext");
-        //console.log(allMediaArray + " : allMediaArray");
-
-        if (globalIndex > allMediaArray.length - 1){
-            globalIndex = 0;
-        } 
-
-        let source = allMediaArray[globalIndex].getAttribute('src');
-        displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-        generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
+    lightboxNext.addEventListener("click", handleNextSlide);
+    window.addEventListener("keyup", e => {
+        if (e.key === "ArrowRight") {
+            handleNextSlide(e);
+        } else if (e.key === "Escape") {
+            closeLightbox();
+        }
     });
+}
+
+// Fonctions pour afficher la diapositive suivante au clic de la souris et au clavier
+
+function handlePreviousSlide(e) {
+    globalIndex = globalIndex - 1;
+    //console.log(globalIndex + " : indexPrev");
+    let allMediaArray = [...document.querySelectorAll(".media")];
+    if (globalIndex < 0) {
+        globalIndex = allMediaArray.length - 1;
+    }
+    let source = allMediaArray[globalIndex].getAttribute('src');
+    let hiddenImage = document.querySelector(".hiddenImage");
+    let hiddenVideo = document.querySelector(".hiddenVideo");
+    displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
+    generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
 }
 
 function displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo) {
     let lightboxPrev = document.querySelector(".lightbox__prev");
     console.log("displayLightboxPreviousSlide");
-    lightboxPrev.addEventListener("click", e => {
-        globalIndex = globalIndex - 1;
-        //console.log(globalIndex + " : indexPrev");
-
-        if (globalIndex < 0) {
-            globalIndex = allMediaArray.length - 1;
-        }
-
-        let source = allMediaArray[globalIndex].getAttribute("src");
-        displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-        generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
-    });
-}
-
-// juste sur la lightbox
-function addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVideo) {
+    lightboxPrev.addEventListener("click", handlePreviousSlide);
     window.addEventListener("keyup", e => {
-        console.log("window entree");
-        if (e.key === "ArrowRight") {
-            console.log("window ArrowRight");
-            globalIndex = globalIndex + 1;
-            //console.log(globalIndex + " : indexNext");
-            //console.log(allMediaArray + " : allMediaArray");
-
-            if (globalIndex > allMediaArray.length - 1){
-                globalIndex = 0;
-            } 
-            let source = allMediaArray[globalIndex].getAttribute('src');
-            displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-            generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
-
-        } else if (e.key === "ArrowLeft") {
-            console.log("window ArrowLeft");
-            globalIndex = globalIndex - 1;
-            //console.log(globalIndex + " : indexPrev");
-
-            if (globalIndex < 0) {
-                globalIndex = allMediaArray.length - 1;
-            }
-
-            let source = allMediaArray[globalIndex].getAttribute("src");
-            displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo);
-            generateMediaCaptionInLightbox(allMediaArray[globalIndex]);
-
+        if (e.key === "ArrowLeft") {
+            handlePreviousSlide(e);
         } else if (e.key === "Escape") {
-            console.log("window Escape");
             closeLightbox();
-
-        } else {
-            //console.log("window unsupported key " + e.key);
         }
     });
 }
@@ -384,7 +373,8 @@ function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, h
         //console.log("entering sortByPopularity click");
         photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
         generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
-        
+
+        let allMediaArray = [...document.querySelectorAll(".media")]; //récupère la liste des médias triés du html
         displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
         displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
         displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
@@ -399,6 +389,7 @@ function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, h
             photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
             generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
             
+            let allMediaArray = [...document.querySelectorAll(".media")];
             displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
             displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
             displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
@@ -419,6 +410,7 @@ function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, h
         //La date, dans le json, est exprimée sous forme de chaîne de caractères. On recourt à "Date.parse()" pour convertir le string en objet de type "date".
         //On prend l'attribut "date" de l'objet "a". On le passe en paramètre à la méthode "Date.parse" pour convertir la chaîne de caractères en date.
 
+        let allMediaArray = [...document.querySelectorAll(".media")];
         displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
         displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
         displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
@@ -433,6 +425,7 @@ function sortMediaByPopularity(photographerMedia, photographer, allMediaArray, h
             photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
             generatePhotographerWork(photographerMedia, photographer);
 
+            let allMediaArray = [...document.querySelectorAll(".media")];
             displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
             displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
             displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
@@ -452,6 +445,7 @@ function sortMediaByTitle(photographerMedia, photographer, allMediaArray, hidden
         //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
         generatePhotographerWork(photographerMedia, photographer);
 
+        let allMediaArray = [...document.querySelectorAll(".media")];
         displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
         displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
         displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
@@ -467,6 +461,7 @@ function sortMediaByTitle(photographerMedia, photographer, allMediaArray, hidden
             //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
             generatePhotographerWork(photographerMedia, photographer);
 
+            let allMediaArray = [...document.querySelectorAll(".media")];
             displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
             displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
             displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
@@ -529,7 +524,6 @@ fetch ("FishEyeData.json")
     displayLightboxCurrentSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxNextSlide(allMediaArray, hiddenImage, hiddenVideo);
     displayLightboxPreviousSlide(allMediaArray, hiddenImage, hiddenVideo);
-    addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVideo);
 
     // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre
     sortMediaByPopularity(photographerMedia, photographer, allMediaArray, hiddenImage, hiddenVideo);
