@@ -168,25 +168,22 @@ function calculNombreTotalDeLikes(photographerMedia) {
     return likesSum;
 }
 
-//Fonction ajoutant un écouteur d'évènement sur chaque "like" qui permet d'incrémenter les compteurs individuel et global
+//Fonctions ajoutant un écouteur d'évènement sur chaque "like" et incrémentant les compteurs individuel et global
+function incrementCounters(e) {
+    let valeurCompteurIndividuel = e.target.previousElementSibling;
+    valeurCompteurIndividuel.innerHTML = parseInt(valeurCompteurIndividuel.innerHTML) + 1; //mise à jour de la valeur
+    //console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
+    let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
+    valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
+    //console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
+}
+
 function installLikeEventListeners(coeurs) {
     coeurs.forEach(coeur => {
-        coeur.addEventListener("click", e => {
-            let valeurCompteurIndividuel = e.target.previousElementSibling;
-            valeurCompteurIndividuel.innerHTML = parseInt(valeurCompteurIndividuel.innerHTML) + 1; //mise à jour de la valeur
-            //console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
-            let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
-            valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
-            //console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
-        });
+        coeur.addEventListener("click", incrementCounters);
         coeur.addEventListener("keyup", e => {
-            let valeurCompteurIndividuel = e.target.previousElementSibling;
             if (e.key === "Enter") {
-                valeurCompteurIndividuel.innerHTML = parseInt(valeurCompteurIndividuel.innerHTML) + 1; //mise à jour de la valeur
-                //console.log(valeurCompteurIndividuel.innerHTML + " : valeurCompteurIndividuel incrémenté");
-                let valeurCompteurGlobal = document.querySelector(".valeurCompteurGlobal");
-                valeurCompteurGlobal.innerHTML = parseInt(valeurCompteurGlobal.innerHTML) + 1;
-                //console.log(valeurCompteurGlobal.innerHTML + " : valeurCompteurGlobal incrémenté");
+                incrementCounters(e);
             }
         });
     });
