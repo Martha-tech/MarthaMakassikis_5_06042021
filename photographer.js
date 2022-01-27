@@ -354,10 +354,15 @@ function displayModal() {
 
     let inputFirstname = document.getElementById("prenom");
     inputFirstname.focus(); //ne fonctionne pas
+    window.addEventListener("keyup", e => {
+        if (e.key === "Escape") {
+            closeModal(e);
+        };
+    })
 }
 
-function closeModal(event) {
-    event.preventDefault();
+function closeModal(e) {
+    e.preventDefault();
     let contactModal = document.getElementById("contact_modal");
     let scrollBody = document.querySelector(".scroll");
 
@@ -365,11 +370,6 @@ function closeModal(event) {
     contactModal.style.display = "none";
     scrollBody.style.overflow = "auto";
     //console.log("close modal sortie");
-
-    let closeModalCross = document.querySelector(".close_modal");
-    closeModalCross.addEventListener("keyup", e => {
-        closeModal;
-    }); //ne fonctionne pas
 }
 
 // Fonctions triant les médias du photographe 
@@ -511,11 +511,6 @@ fetch ("FishEyeData.json")
     // Listeners sur la croix "x" et sur le bouton "Envoyer" pour déclencher la fermeture de la modale
     let closeButton = document.querySelector(".close_modal");
     closeButton.addEventListener("click", closeModal);
-    window.addEventListener("keyup", e => {
-        if (e.key === "Escape") {
-            closeModal();
-        };
-    }) //ne fonctionne pas
 
     let formSendButton = document.querySelector(".form_send");
     formSendButton.addEventListener("click", closeModal);
