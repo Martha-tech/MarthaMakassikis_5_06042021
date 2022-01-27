@@ -68,6 +68,10 @@ option :hover {
     border-radius: 0.3rem;
 }
 
+.media:focus {
+    border: 3px solid blue;
+}
+
 video {
     width: 25rem;
     height: 25rem;
