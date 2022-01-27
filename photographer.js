@@ -131,9 +131,9 @@ function generatePhotographerWork(photographerMedia, photographer) {
     mediaList.replaceChildren(...elementsHTML); // méthode qui s'applique à mediaList et qui prend en argument le tableau "elementsHTML" (éléments à remplacer)
 }
 
-//Fonctions qui permettent d'afficher, dans la div "photographerLikes" située en bas de page, 
+//Fonctions qui permettent d'afficher, dans la div "photographerLikes" située en bas de page, ...
 
-// le nombre total de likes du photographe
+// ... le nombre total de likes du photographe
 function displayCompteurGlobal(nombreTotalDeLikes) {   
     let photographerLikes = document.querySelector(".photographerLikes");
 
@@ -145,7 +145,7 @@ function displayCompteurGlobal(nombreTotalDeLikes) {
     photographerLikes.appendChild(sectionCompteurLikes);
 }
 
-// le tarif journalier du photographe
+// ... le tarif journalier du photographe
 function displayTarif(tarifJournalier) {
 
     let photographerLikes = document.querySelector(".photographerLikes");
@@ -217,6 +217,7 @@ function displayImageOrVideoInLightbox(source, hiddenImage, hiddenVideo) {
 }
 
 //Fonction qui génère, dans la Lightbox, la légende sous chaque média affiché
+
 function generateMediaCaptionInLightbox(media) {
     let title = media.getAttribute("aria-label");
     
@@ -340,6 +341,7 @@ function addKeyboardEventListenerOnWindow(allMediaArray, hiddenImage, hiddenVide
         }
     });
 }
+
 
 // Fonctions d'ouverture et de fermeture de la modale
 
