@@ -116,11 +116,11 @@ function generatePhotographerWork(photographerMedia, photographer) {
         //console.log("===>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" aria-label= "'+ mediaElement.title +'"src="/Photos/' + photographer.name + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur" tabindex="0"> </i></div>';
         } else if (mediaElement.video) {
             sectionMedia.innerHTML =
-            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <video class="media" tabindex="0" aria-label= "'+ mediaElement.title +'" onclick="openLightbox()" src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
+            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <video class="media" tabindex="0" aria-label= "'+ mediaElement.title +'"src="/Photos/' + photographer.name + '/' + mediaElement.video + '"></video></div></a>' + 
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + '</span>  <i class="fas fa-heart coeur" tabindex="0"></i>  </div>';
         }
 
