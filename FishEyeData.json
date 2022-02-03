@@ -2,7 +2,7 @@
 	"photographers": [
 		{
 			"name": "Mimi Keel",
-			"foldername": "Mimi Keel",
+			"foldername": "Mimi_Keel",
 			"id": 243,
 			"city": "London",
 			"country": "UK",
@@ -22,7 +22,7 @@
 		},
 		{
 			"name": "Tracy Galindo",
-			"foldername" : "Tracy_Galindo",
+			"foldername": "Tracy_Galindo",
 			"id": 82,
 			"city": "Montreal",
 			"country": "Canada",
@@ -32,7 +32,7 @@
 		},
 		{
 			"name": "Nabeel Bradford",
-			"foldername": "Nabeel Bradford",
+			"foldername": "Nabeel_Bradford",
 			"id": 527,
 			"city": "Mexico City",
 			"country": "Mexico",
