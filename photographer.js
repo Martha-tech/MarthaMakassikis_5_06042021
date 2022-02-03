@@ -94,7 +94,7 @@ function generateSectionPortrait(photographer) {
     
     sectionPortrait.classList.add('photographerPortrait');
     sectionPortrait.innerHTML = 
-        '<div class="portrait"> <img src="Photos/Photographers_ID_Photos/' + photographer.portrait + '"/> </div>' 
+        '<div class="portrait"> <img alt= ' + photographer.name + ' src="Photos/Photographers_ID_Photos/' + photographer.portrait + '"/> </div>' 
 
     //console.log(sectionPortrait.innerHTML);
     //console.log(photographerHeader.innerHTML);
@@ -116,7 +116,7 @@ function generatePhotographerWork(photographerMedia, photographer) {
         //console.log("===>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" aria-label= "'+ mediaElement.title +'"src="/Photos/' + photographer.foldername + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" alt= '+ mediaElement.title +' aria-label= "'+ mediaElement.title +'"src="/Photos/' + photographer.foldername + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur" tabindex="0"> </i></div>';
         } else if (mediaElement.video) {
             sectionMedia.innerHTML =
