@@ -94,7 +94,7 @@ function generateSectionPortrait(photographer) {
     
     sectionPortrait.classList.add('photographerPortrait');
     sectionPortrait.innerHTML = 
-        '<div class="portrait"> <img alt= ' + photographer.name + ' src="Photos/Photographers_ID_Photos/' + photographer.portrait + '"/> </div>' 
+        '<div class="portrait"> <img src="Photos/Photographers_ID_Photos/' + photographer.portrait + '"/> </div>' 
 
     //console.log(sectionPortrait.innerHTML);
     //console.log(photographerHeader.innerHTML);
@@ -116,7 +116,7 @@ function generatePhotographerWork(photographerMedia, photographer) {
         //console.log("===>" + mediaElement.image);
         if (mediaElement.image) {
             sectionMedia.innerHTML =
-            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" alt= '+ mediaElement.title +' aria-label= "'+ mediaElement.title +'"src="/Photos/' + photographer.foldername + '/' + mediaElement.image + '"/> </div> </a>' +
+            '<a href="#" tabindex="-1"> <div class="divMedia" tabindex="-1"> <img class="media" tabindex="0" aria-label= "'+ mediaElement.title +'"src="/Photos/' + photographer.foldername + '/' + mediaElement.image + '"/> </div> </a>' +
             '<div class="caption"> <span class="title">' + mediaElement.title + '</span> <span class="likes">' + mediaElement.likes + ' </span> <i class="fas fa-heart coeur" tabindex="0"> </i></div>';
         } else if (mediaElement.video) {
             sectionMedia.innerHTML =
@@ -275,7 +275,7 @@ function displayLightboxCurrentSlide() {
 }
 
 // Fonctions pour afficher la diapositive suivante au clic de la souris et au clavier
-function handleNextSlide(e) {
+function handleNextSlide() {
     globalIndex = globalIndex + 1;
     //console.log(globalIndex + " : indexNext");
     let allMediaArray = [...document.querySelectorAll(".media")];
@@ -295,7 +295,7 @@ function displayLightboxNextSlide() {
     lightboxNext.addEventListener("click", handleNextSlide);
     window.addEventListener("keyup", e => {
         if (e.key === "ArrowRight") {
-            handleNextSlide(e);
+            handleNextSlide();
         } else if (e.key === "Escape") {
             closeLightbox();
         }
@@ -366,102 +366,71 @@ function closeModal(e) {
 // Fonction de tri des médias par popularité (nombre de "likes"), dans un ordre décroissant
     
 function sortMediaByPopularity(photographerMedia, photographer) {
-    let sortByPopularity = document.querySelector(".sortByPopularity");
-    sortByPopularity.addEventListener("click", e => {
-        //console.log("entering sortByPopularity click");
-        photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
-        generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
+    console.log("tri popularité")
 
-        displayLightboxCurrentSlide();
-        displayLightboxNextSlide();
-        displayLightboxPreviousSlide();
 
-        const coeurs = document.querySelectorAll(".coeur");
-        installLikeEventListeners(coeurs);
+    //console.log("entering sortByPopularity click");
+    photographerMedia.sort(function compareMedia(a, b) {
+        if(a.likes < b.likes) { return -1; }
+        if(a.likes > b.likes) { return 1; }
+        return 0;
     });
-    let sortingSelect = document.getElementById("sorting-select");
-    sortingSelect.addEventListener("keyup", e => {
-        if ((e.target.value === "popularity") && (e.key === "Enter")) {
-            console.log("sort by popularity on keyboard");
-            photographerMedia.sort(function compareMedia(a, b) {return a.likes < b.likes;});
-            generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
-            
-            displayLightboxCurrentSlide();
-            displayLightboxNextSlide();
-            displayLightboxPreviousSlide();
+    console.log(photographerMedia);
+    generatePhotographerWork(photographerMedia, photographer); //rafraîchit le html
 
-            const coeurs = document.querySelectorAll(".coeur");
-            installLikeEventListeners(coeurs);
-        }
-    });
+    displayLightboxCurrentSlide();
+    //displayLightboxNextSlide();
+    //displayLightboxPreviousSlide();
+
+    const coeurs = document.querySelectorAll(".coeur");
+    installLikeEventListeners(coeurs);
+
 }
 
  // Fonction de tri des médias par date (year-month-day), dans un ordre croissant
 
  function sortMediaByDate(photographerMedia, photographer) {
-    let sortByDate = document.querySelector(".sortByDate");
-    sortByDate.addEventListener("click", e => {
-        photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
+     console.log("tri date")
+        photographerMedia.sort(function compareMedia (a, b) {
+            if(Date.parse(a.date) < Date.parse(b.date)) { return -1; }
+            if(Date.parse(a.date) > Date.parse(b.date)) { return 1; }
+            return 0;
+        });
+
+
+
+
+        console.log(photographerMedia);
         generatePhotographerWork(photographerMedia, photographer);
         //La date, dans le json, est exprimée sous forme de chaîne de caractères. On recourt à "Date.parse()" pour convertir le string en objet de type "date".
         //On prend l'attribut "date" de l'objet "a". On le passe en paramètre à la méthode "Date.parse" pour convertir la chaîne de caractères en date.
 
         displayLightboxCurrentSlide();
-        displayLightboxNextSlide();
-        displayLightboxPreviousSlide();
+        //displayLightboxNextSlide();
+        //displayLightboxPreviousSlide();
 
         const coeurs = document.querySelectorAll(".coeur");
         installLikeEventListeners(coeurs);
-    });
-    let sortingSelect = document.getElementById("sorting-select");
-    sortingSelect.addEventListener("keyup", e => {
-        if ((e.target.value === "date") && (e.key === "Enter")) {
-            console.log("sort by date on keyboard");
-            photographerMedia.sort(function compareMedia (a, b) {return Date.parse(a.date) - Date.parse(b.date);});
-            generatePhotographerWork(photographerMedia, photographer);
-
-            displayLightboxCurrentSlide();
-            displayLightboxNextSlide();
-            displayLightboxPreviousSlide();
-
-            const coeurs = document.querySelectorAll(".coeur");
-            installLikeEventListeners(coeurs);
-        }
-    });
 }
 
 // Fonction de tri des médias par titre (ordre alphabétique), dans un ordre croissant
 
 function sortMediaByTitle(photographerMedia, photographer) {
-    let sortByTitle = document.querySelector(".sortByTitle");
-    sortByTitle.addEventListener("click", e => {
-        photographerMedia.sort(function compareMedia(a, b) {return a.title > b.title;});
+        photographerMedia.sort(function compareMedia(a, b) {
+            if(a.title < b.title) { return -1; }
+            if(a.title > b.title) { return 1; }
+            return 0;
+        });
+        console.log(photographerMedia);
         //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
         generatePhotographerWork(photographerMedia, photographer);
 
         displayLightboxCurrentSlide();
-        displayLightboxNextSlide();
-        displayLightboxPreviousSlide();
+        //displayLightboxNextSlide();
+        //displayLightboxPreviousSlide();
 
         const coeurs = document.querySelectorAll(".coeur");
         installLikeEventListeners(coeurs);
-    });
-    let sortingSelect = document.getElementById("sorting-select");
-    sortingSelect.addEventListener("keyup", e => {
-        if ((e.target.value === "title") && (e.key === "Enter")) {
-            //console.log("sort by title on keyboard");
-            photographerMedia.sort(function compareMedia(a, b) {return a.title > b.title;});
-            //photographerMedia.sort( (a, b) => a.title.localeCompare(b.title, 'fr', {ignorePunctuation: true}));
-            generatePhotographerWork(photographerMedia, photographer);
-
-            displayLightboxCurrentSlide();
-            displayLightboxNextSlide();
-            displayLightboxPreviousSlide();
-
-            const coeurs = document.querySelectorAll(".coeur");
-            installLikeEventListeners(coeurs);
-        } 
-    });  
 }
 
 /* ---------------------- FETCH -------------------- */
@@ -500,6 +469,10 @@ fetch ("FishEyeData.json")
     // Listeners sur la croix "x" et sur le bouton "Envoyer" pour déclencher la fermeture de la modale
     let closeButton = document.querySelector(".close_modal");
     closeButton.addEventListener("click", closeModal);
+    closeButton.addEventListener("keyup", e => {
+        if (e.key == "Enter")
+            closeModal(e);
+    })
 
     let formSendButton = document.querySelector(".form_send");
     formSendButton.addEventListener("click", closeModal);
@@ -514,9 +487,19 @@ fetch ("FishEyeData.json")
     displayLightboxPreviousSlide();
 
     // Listeners sur le menu déroulant "tri" & tri des médias par popularité, date, titre
-    sortMediaByPopularity(photographerMedia, photographer);
-    sortMediaByDate(photographerMedia, photographer); 
-    sortMediaByTitle(photographerMedia, photographer);
+    let sortInput = document.querySelector('#sorting-select');
+
+    sortInput.addEventListener("change", e => {
+        if (e.target.value == "popularity")
+            sortMediaByPopularity(photographerMedia, photographer);
+        else if (e.target.value == "date")
+            sortMediaByDate(photographerMedia, photographer);
+        else if (e.target.value == "title")
+            sortMediaByTitle(photographerMedia, photographer);
+    })
+
+
+
     
 })
 
